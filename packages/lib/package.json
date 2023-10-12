@@ -1,0 +1,15 @@
+{
+  "name": "lib",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^1.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "mathjs": "^11.11.2",
+    "o1js": "^0.13.1"
+  }
+}
