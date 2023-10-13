@@ -17,5 +17,6 @@ describe("dnaBaseToField", () => {
     // Usage example
     const dnaTree = constructMerkleMapForDNA("ATCGT"); // Or any other variable-length DNA string
     console.log(dnaTree.getRoot()); // This would give the root of the Merkle tree
+    console.log(dnaTree.get(Field(0))); // This would give the first leaf of the Merkle tree
   });
 });
