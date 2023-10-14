@@ -2,6 +2,7 @@ import {
   dnaBaseToField,
   constructMerkleMapForDNA,
 } from "../utils/dnaBaseToField";
+import { DNAStruct } from "../dna/struct";
 import { Field } from "o1js";
 
 describe("dnaBaseToField", () => {
@@ -18,5 +19,12 @@ describe("dnaBaseToField", () => {
     const dnaTree = constructMerkleMapForDNA("ATCGT"); // Or any other variable-length DNA string
     console.log(dnaTree.getRoot()); // This would give the root of the Merkle tree
     console.log(dnaTree.get(Field(0))); // This would give the first leaf of the Merkle tree
+  });
+
+  test("create dna struct and hash", () => {
+    // Usage example
+    const dnaString = "ATCG";
+    const DNA = new DNAStruct(dnaString);
+    console.log(DNA.hash());
   });
 });
