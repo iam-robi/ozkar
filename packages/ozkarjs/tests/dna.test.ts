@@ -4,6 +4,7 @@ import {
 } from "../utils/dnaBaseToField";
 import { DNAStruct } from "../dna/struct";
 import { Field } from "o1js";
+import { expect } from "bun:test";
 
 describe("dnaBaseToField", () => {
   test("should convert ATCG to a field array", () => {
@@ -27,5 +28,17 @@ describe("dnaBaseToField", () => {
     const DNA = new DNAStruct(dnaString);
     // console.log(DNA.hash());
     console.log(DNA.merkleTree().getRoot().toString());
+  });
+  test("verfiy locus 2 of merkle tree", () => {
+    // Usage example
+    const dnaString = "ATCG";
+    const DNA = new DNAStruct(dnaString);
+
+    const locus2 = dnaString[1];
+    const locus2Field = dnaBaseToField(locus2);
+
+    expect(DNA.merkleTree().get(Field(1)).toString()).toEqual(
+      locus2Field.toString()
+    );
   });
 });
