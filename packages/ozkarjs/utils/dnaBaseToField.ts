@@ -53,6 +53,42 @@ export function constructMerkleMapForDNA(dnaString: string): MerkleMap {
   [...dnaString].forEach((base, index) => {
     const fieldVal = dnaBaseToField(base);
     dnaMap.set(Field(index), fieldVal);
+    console.log(index);
   });
   return dnaMap;
+}
+
+export function parseFasta(fastaString: string) {
+  const sequences = [];
+
+  const splitSequences = fastaString.split(">").slice(1); // Removing the first empty item
+
+  let index = 0; // Initialize index
+
+  for (const seq of splitSequences) {
+    const lines = seq.trim().split("\n");
+    const description = lines[0];
+
+    // Parse metadata
+    const [id, type, assemblyStatus, assemblyID, details] =
+      description.split(" ");
+
+    const metadata = {
+      id: id,
+      type: type.split(":")[1],
+      assemblyStatus: assemblyStatus.split(":")[1],
+      assemblyID: assemblyID.split(":")[1],
+      details: details,
+    };
+
+    const sequence = lines.slice(1).join("");
+
+    sequences.push({
+      index: index++, // Add index to the sequence object
+      metadata: metadata,
+      sequence: sequence,
+    });
+  }
+
+  return sequences;
 }

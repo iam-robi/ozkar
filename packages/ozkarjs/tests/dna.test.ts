@@ -1,10 +1,11 @@
 import {
   dnaBaseToField,
   constructMerkleMapForDNA,
+  parseFasta,
 } from "../utils/dnaBaseToField";
 import { DNAStruct } from "../dna/struct";
 import { Field } from "o1js";
-import { expect } from "bun:test";
+import { expect, test, describe } from "bun:test";
 
 describe("dnaBaseToField", () => {
   test("should convert ATCG to a field array", () => {
@@ -12,7 +13,7 @@ describe("dnaBaseToField", () => {
     const expectedFieldArray = [0, 3, 1, 2].map((val) => new Field(val));
 
     const result = [...dnaString].map((base) => dnaBaseToField(base));
-    console.log(result[2].value);
+
     expect(result).toEqual(expectedFieldArray);
   });
   test("dna to merkle tree", () => {
@@ -40,5 +41,23 @@ describe("dnaBaseToField", () => {
     expect(DNA.merkleTree().get(Field(1)).toString()).toEqual(
       locus2Field.toString()
     );
+  });
+
+  test("read fasta and construct DNA", async () => {
+    console.log("Current working directory:", process.cwd());
+    const txt = Bun.file(
+      "./data/Escherichia_coli_w_gca_000184185.ASM18418v1_.dna.toplevel.fa"
+    );
+    const content = await txt.text();
+
+    const sequences = parseFasta(content);
+
+    console.log("#sequences :", sequences.length);
+    for (let seq of sequences) {
+      console.log(seq.metadata);
+    }
+    // we take chromosome sequence as its more likely to contain lacZ gene
+    const DNA = new DNAStruct(sequences[0].sequence);
+    const dnaTree = DNA.merkleTree();
   });
 });
