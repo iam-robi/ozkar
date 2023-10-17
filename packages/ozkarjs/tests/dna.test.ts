@@ -3,7 +3,7 @@ import {
   constructMerkleMapForDNA,
   parseFasta,
 } from "../utils/dnaBaseToField";
-import { DNAStruct } from "../dna/struct";
+import { ZKSeq } from "../dna/struct";
 import { Field } from "o1js";
 import { expect, test, describe } from "bun:test";
 
@@ -26,14 +26,14 @@ describe("dnaBaseToField", () => {
   test("create dna struct and get its merkle tree", () => {
     // Usage example
     const dnaString = "ATCG";
-    const DNA = new DNAStruct(dnaString);
+    const DNA = new ZKSeq(dnaString);
     // console.log(DNA.hash());
     console.log(DNA.merkleTree().getRoot().toString());
   });
   test("verfiy locus 2 of merkle tree", () => {
     // Usage example
     const dnaString = "ATCG";
-    const DNA = new DNAStruct(dnaString);
+    const DNA = new ZKSeq(dnaString);
 
     const locus2 = dnaString[1];
     const locus2Field = dnaBaseToField(locus2);
@@ -56,8 +56,8 @@ describe("dnaBaseToField", () => {
     for (let seq of sequences) {
       console.log(seq.metadata);
     }
-    // we take chromosome sequence as its more likely to contain lacZ gene
-    const DNA = new DNAStruct(sequences[0].sequence);
+    // we take chromosome sequence as its more likely to contain lacZ gene, for testing we take a short sequence we will have to deal with data size later
+    const DNA = new ZKSeq(sequences[0].sequence.slice(0, 50));
     const dnaTree = DNA.merkleTree();
   });
 });

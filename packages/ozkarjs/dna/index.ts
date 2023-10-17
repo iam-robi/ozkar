@@ -1,3 +1,3 @@
-import { DNAStruct } from "./struct";
+import { ZKSeq } from "./struct";
 
-export { DNAStruct };
+export { ZKSeq };

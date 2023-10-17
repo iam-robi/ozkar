@@ -5,7 +5,7 @@ import {
 } from "../utils/dnaBaseToField";
 // Step 1: Create an Interface for DNAStruct
 
-export class DNAStruct extends Struct({
+export class ZKSeq extends Struct({
   dna: CircuitString,
 }) {
   constructor(dnaString: string) {
