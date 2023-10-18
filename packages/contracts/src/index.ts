@@ -1,3 +1,3 @@
-import { Add } from './Add.js';
+import { GeneProof } from './GeneProof.js';
 
-export { Add };
+export { GeneProof as Add };

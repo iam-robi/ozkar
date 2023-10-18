@@ -1,6 +1,6 @@
-import { Add } from './Add';
+import { GeneProof } from './GeneProof';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
-import { dnaBaseToField } from 'ozkarjs';
+import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
  * with your own tests.
@@ -10,17 +10,17 @@ import { dnaBaseToField } from 'ozkarjs';
 
 let proofsEnabled = false;
 
-describe('Add', () => {
+describe('GeneProof', () => {
   let deployerAccount: PublicKey,
     deployerKey: PrivateKey,
     senderAccount: PublicKey,
     senderKey: PrivateKey,
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
-    zkApp: Add;
+    zkApp: GeneProof;
 
   beforeAll(async () => {
-    if (proofsEnabled) await Add.compile();
+    if (proofsEnabled) await GeneProof.compile();
   });
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Add', () => {
       Local.testAccounts[1]);
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
-    zkApp = new Add(zkAppAddress);
+    zkApp = new GeneProof(zkAppAddress);
   });
 
   async function localDeploy() {
@@ -49,22 +49,36 @@ describe('Add', () => {
 
   it('generates and deploys the `Add` smart contract', async () => {
     await localDeploy();
-    const num = zkApp.num.get();
-    let e = dnaBaseToField('A');
-    expect(num).toEqual(Field(1));
+    const deployedGeneHash = zkApp.geneHash.get();
+    let gene = 'ATT';
+    let geneSeq = new ZKSeq(gene);
+    let geneHash = geneSeq.hash();
+    expect(geneHash).toEqual(deployedGeneHash);
   });
 
-  it('correctly updates the num state on the `Add` smart contract', async () => {
+  it('correctly updates the genehash state on the `Add` smart contract', async () => {
     await localDeploy();
+
+    let gene = 'ATC';
+    let geneSeq = new ZKSeq(gene);
+    let geneHash = geneSeq.hash();
 
     // update transaction
     const txn = await Mina.transaction(senderAccount, () => {
-      zkApp.update();
+      zkApp.update(geneHash);
     });
     await txn.prove();
     await txn.sign([senderKey]).send();
 
-    const updatedNum = zkApp.num.get();
-    expect(updatedNum).toEqual(Field(3));
+    const updatedGeneHash = zkApp.geneHash.get();
+    expect(updatedGeneHash).toEqual(geneHash);
+
+    let dna = 'ATTTTGATGGCCAC';
+    let dnaSeq = new ZKSeq(gene);
+
+    // verify transaction
+    const txn2 = await Mina.transaction(senderAccount, () => {
+      zkApp.verify(dnaSeq, geneSeq);
+    });
   });
 });

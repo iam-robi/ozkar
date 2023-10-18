@@ -48,6 +48,6 @@
     "o1js": "0.13.*"
   },
   "dependencies": {
-    "ozkarjs": "0.0.1"
+    "ozkarjs": "^0.0.3"
   }
 }
