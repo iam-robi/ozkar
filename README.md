@@ -1,6 +1,6 @@
 # ozkar
 
-zk framework and tooling for healthcare , using o1js
+zk framework and tooling for healthcare and federated learning, using o1js
 
 get dna data:
 
