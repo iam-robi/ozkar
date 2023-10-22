@@ -30,7 +30,7 @@ describe("dnaBaseToField", () => {
     // console.log(DNA.hash());
     console.log(DNA.merkleTree().getRoot().toString());
   });
-  test("verfiy locus 2 of merkle tree", () => {
+  test("verify locus 2 of merkle tree", () => {
     // Usage example
     const dnaString = "ATCG";
     const DNA = new ZKSeq(dnaString);
@@ -60,4 +60,8 @@ describe("dnaBaseToField", () => {
     const DNA = new ZKSeq(sequences[0].sequence.slice(0, 50));
     const dnaTree = DNA.merkleTree();
   });
+
+  // test("Dyamic array type", async () => {
+  //   class FieldArray extends DynamicArray(Field, 8) {}
+  // });
 });

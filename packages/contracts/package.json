@@ -1,34 +1,8 @@
 {
   "name": "contracts",
   "version": "0.1.0",
-  "description": "",
   "author": "",
-  "license": "Apache-2.0",
-  "keywords": [
-    "mina-zkapp",
-    "mina-zk-app",
-    "mina-dapp",
-    "zkapp"
-  ],
-  "type": "module",
   "main": "build/src/index.js",
-  "types": "build/src/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "buildw": "tsc --watch",
-    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "format": "prettier --write --ignore-unknown **/*",
-    "prepare": "cd .. && husky install contracts/.husky",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "testw": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "lint": "npx eslint src/* --fix"
-  },
-  "lint-staged": {
-    "**/*": [
-      "eslint src/* --fix",
-      "prettier --write --ignore-unknown"
-    ]
-  },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
@@ -47,7 +21,33 @@
   "peerDependencies": {
     "o1js": "0.13.*"
   },
+  "description": "",
+  "keywords": [
+    "mina-zkapp",
+    "mina-zk-app",
+    "mina-dapp",
+    "zkapp"
+  ],
+  "license": "Apache-2.0",
+  "lint-staged": {
+    "**/*": [
+      "eslint src/* --fix",
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "scripts": {
+    "build": "tsc",
+    "buildw": "tsc --watch",
+    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "format": "prettier --write --ignore-unknown **/*",
+    "prepare": "cd .. && husky install contracts/.husky",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "testw": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "lint": "npx eslint src/* --fix"
+  },
+  "type": "module",
+  "types": "build/src/index.d.ts",
   "dependencies": {
-    "ozkarjs": "^0.0.3"
+    "ozkarjs": "0.0.9"
   }
 }

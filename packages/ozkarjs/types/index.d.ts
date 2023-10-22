@@ -18,6 +18,7 @@
  * H - Not G (A, C, T, or U)
  * V - Not T or U (A, C, or G)
  */
+
 export type DNABase =
   | "A"
   | "C"

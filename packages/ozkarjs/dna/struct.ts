@@ -9,7 +9,6 @@ export class ZKSeq extends Struct({
   dna: CircuitString,
 }) {
   constructor(dnaString: string) {
-    console.log("Hello from DNAStruct constructor!", dnaString);
     super({ dna: dnaString });
   }
   toFields() {

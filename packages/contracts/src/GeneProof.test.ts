@@ -1,4 +1,4 @@
-import { GeneProof } from './GeneProof';
+import { GeneProof, FieldArray } from './GeneProof';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
 import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 /*
@@ -47,7 +47,7 @@ describe('GeneProof', () => {
     await txn.sign([deployerKey, zkAppPrivateKey]).send();
   }
 
-  it('generates and deploys the `Add` smart contract', async () => {
+  it('generates and deploys the `GeneProof` smart contract', async () => {
     await localDeploy();
     const deployedGeneHash = zkApp.geneHash.get();
     let gene = 'ATT';
@@ -56,7 +56,7 @@ describe('GeneProof', () => {
     expect(geneHash).toEqual(deployedGeneHash);
   });
 
-  it('correctly updates the genehash state on the `Add` smart contract', async () => {
+  it('correctly updates the genehash state on the `Gene Proof` smart contract', async () => {
     await localDeploy();
 
     let gene = 'ATC';
@@ -74,11 +74,14 @@ describe('GeneProof', () => {
     expect(updatedGeneHash).toEqual(geneHash);
 
     let dna = 'ATTTTGATGGCCAC';
-    let dnaSeq = new ZKSeq(gene);
+    let dnaSeq = new ZKSeq(dna);
 
     // verify transaction
     const txn2 = await Mina.transaction(senderAccount, () => {
-      zkApp.verify(dnaSeq, geneSeq);
+      zkApp.verify(
+        FieldArray.from(dnaSeq.toFields()),
+        FieldArray.from(geneSeq.toFields())
+      );
     });
   });
 });

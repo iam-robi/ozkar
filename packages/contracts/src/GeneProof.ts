@@ -1,4 +1,12 @@
-import { Field, SmartContract, state, State, method } from 'o1js';
+import {
+  Field,
+  SmartContract,
+  state,
+  State,
+  method,
+  Provable,
+  UInt32,
+} from 'o1js';
 
 import { ZKSeq } from 'ozkarjs';
 let gene = 'ATT';
@@ -13,23 +21,34 @@ let geneHash = geneSeq.hash();
  *
  * This file is safe to delete and replace with your own contract.
  */
+import { DynamicArray } from './dynamicArray';
+export class FieldArray extends DynamicArray(Field, 8) {}
+
 export class GeneProof extends SmartContract {
   @state(Field) geneHash = State<Field>();
+  // @state(Field) dnaSeqSize = State<Field>();
 
   init() {
     super.init();
     this.geneHash.set(geneHash);
+    // this.dnaSeqSize.set(Field(2));
   }
 
   @method update(newGeneHash: Field) {
     const currentState = this.geneHash.getAndAssertEquals();
     this.geneHash.set(newGeneHash);
-    // for (let i = 0; i < 5; i++) {
-    //   console.log('updating', i);
-    // }
   }
 
-  @method verify(dnaSeq: Field, geneSeq: Field) {
-    console.log('heeeey', dnaSeq);
+  @method verify(dnaSeq: FieldArray, geneSeq: FieldArray) {
+    console.log('processing dnaSeq');
+    //const dnaSeqSize = this.dnaSeqSize.getAndAssertEquals();
+    //console.log('dnaSeqSize', dnaSeqSize);
+
+    for (let i = 0; i < Field(20); i++) {
+      let base: Field = dnaSeq.get(i);
+      //console.log(base);
+    }
+
+    return true;
   }
 }
