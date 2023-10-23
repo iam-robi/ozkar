@@ -5,6 +5,7 @@ import {
 } from "../utils/dnaBaseToField";
 // Step 1: Create an Interface for DNAStruct
 
+import { DynamicArray } from "../utils/dynamicArray";
 export class ZKSeq extends Struct({
   dna: CircuitString,
 }) {
@@ -18,11 +19,18 @@ export class ZKSeq extends Struct({
     return Poseidon.hash(this.toFields());
   }
 
+  toFieldArray() {
+    class FieldArray extends DynamicArray(Field, this.toFields().length) {}
+    let fieldArray = FieldArray.from(this.toFields());
+    return fieldArray;
+  }
+
   merkleTree() {
     // Usage example
     const dnaTree = constructMerkleMapForDNA(this.dna); // Or any other variable-length DNA string
     return dnaTree;
     // This would give the first leaf of the Merkle tree
   }
+
   //TODO: make merkle tree get nucleid acid at position x, get reverse complement
 }

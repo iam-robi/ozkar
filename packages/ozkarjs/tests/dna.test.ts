@@ -6,6 +6,7 @@ import {
 import { ZKSeq } from "../dna/struct";
 import { Field } from "o1js";
 import { expect, test, describe } from "bun:test";
+import { exp } from "mathjs";
 
 describe("dnaBaseToField", () => {
   test("should convert ATCG to a field array", () => {
@@ -56,9 +57,15 @@ describe("dnaBaseToField", () => {
     for (let seq of sequences) {
       console.log(seq.metadata);
     }
+
+    let dnaSeqSize = 5;
     // we take chromosome sequence as its more likely to contain lacZ gene, for testing we take a short sequence we will have to deal with data size later
-    const DNA = new ZKSeq(sequences[0].sequence.slice(0, 50));
+    const DNA = new ZKSeq(sequences[0].sequence.slice(0, dnaSeqSize));
     const dnaTree = DNA.merkleTree();
+
+    const fieldArray = DNA.toFieldArray();
+
+    expect(fieldArray.maxLength()).toEqual(dnaSeqSize);
   });
 
   // test("Dyamic array type", async () => {

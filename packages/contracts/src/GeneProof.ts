@@ -44,7 +44,11 @@ export class GeneProof extends SmartContract {
     //const dnaSeqSize = this.dnaSeqSize.getAndAssertEquals();
     //console.log('dnaSeqSize', dnaSeqSize);
 
-    for (let i = 0; i < Field(20); i++) {
+    let dnaSeqSize = dnaSeq.maxLength();
+    let geneSeqSize = geneSeq.maxLength();
+    let loopSize = dnaSeqSize - geneSeqSize;
+
+    for (let i = 0; i < loopSize; i++) {
       let base: Field = dnaSeq.get(i);
       //console.log(base);
     }
