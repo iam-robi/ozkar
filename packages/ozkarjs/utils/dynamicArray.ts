@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
+import { Bool, Circuit, Field, Poseidon, Provable, Struct } from "o1js";
 
 export { DynamicArray };
 

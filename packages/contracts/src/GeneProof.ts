@@ -8,7 +8,7 @@ import {
   UInt32,
 } from 'o1js';
 
-import { ZKSeq } from 'ozkarjs';
+import { ZKSeq, DynamicArray } from 'ozkarjs';
 let gene = 'ATT';
 let geneSeq = new ZKSeq(gene);
 let geneHash = geneSeq.hash();
@@ -21,7 +21,7 @@ let geneHash = geneSeq.hash();
  *
  * This file is safe to delete and replace with your own contract.
  */
-import { DynamicArray } from './dynamicArray';
+//import { DynamicArray } from './dynamicArray';
 export class FieldArray extends DynamicArray(Field, 8) {}
 
 export class GeneProof extends SmartContract {
