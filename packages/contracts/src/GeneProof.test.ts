@@ -76,6 +76,8 @@ describe('GeneProof', () => {
     let dna = 'ATTTTGATGGCCAC';
     let dnaSeq = new ZKSeq(dna);
 
+    console.log('dna seq field length', dnaSeq.toFields().length);
+
     // verify transaction
     const txn2 = await Mina.transaction(senderAccount, () => {
       zkApp.verify(

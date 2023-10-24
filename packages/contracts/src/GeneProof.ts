@@ -6,6 +6,8 @@ import {
   method,
   Provable,
   UInt32,
+  Circuit,
+  Bool,
 } from 'o1js';
 
 import { ZKSeq, DynamicArray } from 'ozkarjs';
@@ -47,12 +49,33 @@ export class GeneProof extends SmartContract {
     let dnaSeqSize = dnaSeq.maxLength();
     let geneSeqSize = geneSeq.maxLength();
     let loopSize = dnaSeqSize - geneSeqSize;
+    let geneFound: Bool = false;
 
     for (let i = 0; i < loopSize; i++) {
       let base: Field = dnaSeq.get(i);
+      for (let j = 0; j < geneSeqSize; j++) {
+        let geneBase: Field = geneSeq.get(j);
+        let dnaBase: Field = dnaSeq.get(i + j);
+        let matchCount: Field = Field(0);
+        Provable.if(
+          dnaBase.equals(geneBase),
+          matchCount.add(1),
+          matchCount.add(0)
+        );
+
+        //TODO: stop execution at first unmatched to avoid unecesseraly looping
+        Provable.if(
+          matchCount.equals(geneBase.maxLength()),
+          () => {
+            geneFound = true;
+          },
+          console.log('not found, keep searching')
+        );
+      }
+
+      geneFound.assertEquals(true);
+
       //console.log(base);
     }
-
-    return true;
   }
 }
