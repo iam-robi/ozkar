@@ -21,8 +21,7 @@ export class ZKSeq extends Struct({
 
   toFieldArray() {
     class FieldArray extends DynamicArray(Field, this.toFields().length) {}
-    let fieldArray = FieldArray.from(this.toFields());
-    return fieldArray;
+    return FieldArray.from(this.toFields());
   }
 
   merkleTree() {

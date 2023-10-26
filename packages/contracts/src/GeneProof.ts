@@ -11,9 +11,19 @@ import {
 } from 'o1js';
 
 import { ZKSeq, DynamicArray } from 'ozkarjs';
-let gene = 'ATT';
-let geneSeq = new ZKSeq(gene);
+
+let geneSample = 'ATT';
+export let geneSeq = new ZKSeq(geneSample);
 let geneHash = geneSeq.hash();
+let geneFieldArray = geneSeq.toFieldArray();
+export class GeneFieldArray extends DynamicArray(Field, geneSample.length) {}
+
+//sample size will have to be same max length
+let dnaSample = 'ATTTTGATGGCCAC';
+export let dnaSeq = new ZKSeq(dnaSample);
+let dnaFieldArray = dnaSeq.toFieldArray();
+export class DnaFieldArray extends DynamicArray(Field, dnaSample.length) {}
+
 /**
  * Basic Example
  * See https://docs.minaprotocol.com/zkapps for more info.
@@ -41,41 +51,55 @@ export class GeneProof extends SmartContract {
     this.geneHash.set(newGeneHash);
   }
 
-  @method verify(dnaSeq: FieldArray, geneSeq: FieldArray) {
+  @method verify(dnaSeq: DnaFieldArray, geneSeq: GeneFieldArray) {
     console.log('processing dnaSeq');
-    //const dnaSeqSize = this.dnaSeqSize.getAndAssertEquals();
-    //console.log('dnaSeqSize', dnaSeqSize);
 
     let dnaSeqSize = dnaSeq.maxLength();
     let geneSeqSize = geneSeq.maxLength();
-    let loopSize = dnaSeqSize - geneSeqSize;
-    let geneFound: Bool = false;
+    let loopSize: Field = Field(dnaSeqSize - geneSeqSize + 1);
+    let geneFound = Field(0);
+    loopSize.assertGreaterThan(0);
+    Provable.log(loopSize);
 
     for (let i = 0; i < loopSize; i++) {
       let base: Field = dnaSeq.get(i);
+
+      let matchCount: Field = Field(0);
       for (let j = 0; j < geneSeqSize; j++) {
         let geneBase: Field = geneSeq.get(j);
         let dnaBase: Field = dnaSeq.get(i + j);
-        let matchCount: Field = Field(0);
-        Provable.if(
+
+        matchCount = Provable.if(
           dnaBase.equals(geneBase),
           matchCount.add(1),
-          matchCount.add(0)
+          matchCount
         );
 
-        //TODO: stop execution at first unmatched to avoid unecesseraly looping
-        Provable.if(
-          matchCount.equals(geneBase.maxLength()),
-          () => {
-            geneFound = true;
-          },
-          console.log('not found, keep searching')
+        // Provable.if(
+        //   dnaBase.equals(geneBase),
+        //   (matchCount = matchCount.add(1)),
+        //   matchCount.add(0)
+        // );
+
+        Provable.log(
+          i + j,
+          'dnaBase.equals(geneBase)',
+          dnaBase.equals(geneBase),
+          'matchCount',
+          matchCount.toString()
         );
+        //TODO: stop execution at first unmatched to avoid unecesseraly looping
       }
 
-      geneFound.assertEquals(true);
+      geneFound = Provable.if(
+        matchCount.equals(geneSeq.maxLength()),
+        geneFound.add(1),
+        geneFound.add(0)
+      );
 
-      //console.log(base);
+      //Provable.log('geneFound', geneFound.toString());
+
+      //geneFound.assertGreaterThan(0);
     }
   }
 }
