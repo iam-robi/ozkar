@@ -65,12 +65,7 @@ describe('GeneProof', () => {
 
   it('correctly updates the genehash state on the `Gene Proof` smart contract', async () => {
     await localDeploy();
-
-    // let gene = 'ATC';
-    // let geneSeq = new ZKSeq(gene);
     let geneHash = geneSeq.hash();
-
-    // update transaction
     const txn = await Mina.transaction(senderAccount, () => {
       zkApp.update(geneHash);
     });
@@ -79,14 +74,9 @@ describe('GeneProof', () => {
 
     const updatedGeneHash = zkApp.geneHash.get();
     expect(updatedGeneHash).toEqual(geneHash);
-
-    // let dna = 'ATTTTGATGGCCAC';
-    // let dnaSeq = new ZKSeq(dna);
-
-    let dnaFieldArray = dnaSeq.toFieldArray();
-
-    console.log('dna seq field length', dnaSeq.toFields().length);
-
+  });
+  it('correctly verifies presence of gene in dna sequence', async () => {
+    await localDeploy();
     // verify transaction
     const txn2 = await Mina.transaction(senderAccount, () => {
       zkApp.verify(
@@ -94,5 +84,8 @@ describe('GeneProof', () => {
         GeneFieldArray.from(geneSeq.toFields())
       );
     });
+
+    await txn2.prove();
+    await txn2.sign([senderKey]).send();
   });
 });

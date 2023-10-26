@@ -52,8 +52,6 @@ export class GeneProof extends SmartContract {
   }
 
   @method verify(dnaSeq: DnaFieldArray, geneSeq: GeneFieldArray) {
-    console.log('processing dnaSeq');
-
     let dnaSeqSize = dnaSeq.maxLength();
     let geneSeqSize = geneSeq.maxLength();
     let loopSize: Field = Field(dnaSeqSize - geneSeqSize + 1);
