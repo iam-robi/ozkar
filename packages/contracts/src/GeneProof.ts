@@ -75,18 +75,12 @@ export class GeneProof extends SmartContract {
           matchCount
         );
 
-        // Provable.if(
-        //   dnaBase.equals(geneBase),
-        //   (matchCount = matchCount.add(1)),
-        //   matchCount.add(0)
-        // );
-
         Provable.log(
           i + j,
           'dnaBase.equals(geneBase)',
           dnaBase.equals(geneBase),
           'matchCount',
-          matchCount.toString()
+          matchCount
         );
         //TODO: stop execution at first unmatched to avoid unecesseraly looping
       }
@@ -97,9 +91,9 @@ export class GeneProof extends SmartContract {
         geneFound.add(0)
       );
 
-      //Provable.log('geneFound', geneFound.toString());
+      Provable.log('geneFound', geneFound);
 
-      //geneFound.assertGreaterThan(0);
+      geneFound.assertGreaterThan(0);
     }
   }
 }
