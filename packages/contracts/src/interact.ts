@@ -14,7 +14,7 @@
  */
 import { Mina, PrivateKey } from 'o1js';
 import fs from 'fs/promises';
-import { GeneProof } from './GeneProof.js';
+import { GeneProof, geneSeq } from './GeneProof.js';
 
 // check command line arg
 let deployAlias = process.argv[2];
@@ -67,8 +67,9 @@ await GeneProof.compile();
 try {
   // call update() and send transaction
   console.log('build transaction and create proof...');
+  let geneHash = geneSeq.hash();
   let tx = await Mina.transaction({ sender: feepayerAddress, fee }, () => {
-    zkApp.update();
+    zkApp.update(geneHash);
   });
   await tx.prove();
   console.log('send transaction...');

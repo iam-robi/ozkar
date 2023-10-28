@@ -60,12 +60,13 @@ export class GeneProof extends SmartContract {
     Provable.log(loopSize);
 
     for (let i = 0; i < loopSize; i++) {
-      let base: Field = dnaSeq.get(i);
+      let base: Field = dnaSeq.get(Field(i));
 
       let matchCount: Field = Field(0);
       for (let j = 0; j < geneSeqSize; j++) {
-        let geneBase: Field = geneSeq.get(j);
-        let dnaBase: Field = dnaSeq.get(i + j);
+        let geneBase: Field = geneSeq.get(Field(j));
+        let index: Field = Field(i + j);
+        let dnaBase: Field = dnaSeq.get(index);
 
         matchCount = Provable.if(
           dnaBase.equals(geneBase),
