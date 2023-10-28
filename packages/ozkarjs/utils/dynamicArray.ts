@@ -19,7 +19,10 @@ function hashable<T>(type: Provable<T>): HashableProvable<T> {
   };
 }
 
-function DynamicArray<T>(type: Provable<T>, maxLength: number) {
+function DynamicArray<T extends { toFields(): Field[] }>(
+  type: Provable<T>,
+  maxLength: number
+) {
   const _type = hashable(type);
   function Null() {
     return type.fromFields(

@@ -1,6 +1,5 @@
 import {
   GeneProof,
-  FieldArray,
   dnaSeq,
   geneSeq,
   GeneFieldArray,
@@ -88,4 +87,8 @@ describe('GeneProof', () => {
     await txn2.prove();
     await txn2.sign([senderKey]).send();
   });
+  // it('correctly verifies presence of gene in dna sequence', async () => {
+  //   let e = dnaSeq.toFields();
+  //   class FieldArray extends DynamicArray(Field, 8) {}
+  // });
 });

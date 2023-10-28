@@ -48,6 +48,6 @@
   "type": "module",
   "types": "build/src/index.d.ts",
   "dependencies": {
-    "ozkarjs": "0.0.10"
+    "ozkarjs": "0.0.12"
   }
 }

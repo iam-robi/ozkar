@@ -11,7 +11,7 @@ import {
 } from 'o1js';
 
 import { ZKSeq, DynamicArray } from 'ozkarjs';
-
+//import { DynamicArray } from './dynamicArray';
 let geneSample = 'ATT';
 export let geneSeq = new ZKSeq(geneSample);
 let geneHash = geneSeq.hash();
@@ -34,7 +34,6 @@ export class DnaFieldArray extends DynamicArray(Field, dnaSample.length) {}
  * This file is safe to delete and replace with your own contract.
  */
 //import { DynamicArray } from './dynamicArray';
-export class FieldArray extends DynamicArray(Field, 8) {}
 
 export class GeneProof extends SmartContract {
   @state(Field) geneHash = State<Field>();
@@ -54,9 +53,9 @@ export class GeneProof extends SmartContract {
   @method verify(dnaSeq: DnaFieldArray, geneSeq: GeneFieldArray) {
     let dnaSeqSize = dnaSeq.maxLength();
     let geneSeqSize = geneSeq.maxLength();
-    let loopSize: Field = Field(dnaSeqSize - geneSeqSize + 1);
+    let loopSize = dnaSeqSize - geneSeqSize + 1;
     let geneFound = Field(0);
-    loopSize.assertGreaterThan(0);
+    Field(loopSize).assertGreaterThan(0);
     Provable.log(loopSize);
 
     for (let i = 0; i < loopSize; i++) {
