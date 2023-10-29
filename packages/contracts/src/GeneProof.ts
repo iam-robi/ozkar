@@ -12,16 +12,19 @@ import {
 
 import { ZKSeq, DynamicArray } from 'ozkarjs';
 let geneSample = 'ATT';
+let geneLength = geneSample.length;
+
 export let geneSeq = new ZKSeq(geneSample);
 let geneHash = geneSeq.hash();
 let geneFieldArray = geneSeq.toFieldArray();
-export class GeneFieldArray extends DynamicArray(Field, geneSample.length) {}
+export class GeneFieldArray extends DynamicArray(Field, geneLength) {}
 
 //sample size will have to be same max length
 let dnaSample = 'ATTTTGATGGCCAC';
+let dnaLength = dnaSample.length;
 export let dnaSeq = new ZKSeq(dnaSample);
 let dnaFieldArray = dnaSeq.toFieldArray();
-export class DnaFieldArray extends DynamicArray(Field, dnaSample.length) {}
+export class DnaFieldArray extends DynamicArray(Field, dnaLength) {}
 
 /**
  * Basic Example
@@ -35,10 +38,13 @@ export class DnaFieldArray extends DynamicArray(Field, dnaSample.length) {}
 
 export class GeneProof extends SmartContract {
   @state(Field) geneHash = State<Field>();
+  @state(Field) dnaSeqSize = State<Field>();
+  @state(Field) geneSeqSize = State<Field>();
 
   init() {
     super.init();
     this.geneHash.set(geneHash);
+    this.dnaSeqSize.set(Field(dnaLength));
   }
 
   @method update(newGeneHash: Field) {

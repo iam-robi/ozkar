@@ -64,7 +64,5 @@ if (sentTx?.hash() !== undefined) {
   https://berkeley.minaexplorer.com/transaction/${sentTx.hash()}
   `);
 }
-// if you want to inspect the transaction, you can print it out:
-//console.log(transaction.toGraphqlQuery());
 
-// send the transaction to the graphql endpoint
+//TODO: How to deploy different gene /sizes sizes for performances ? dynamic typing doesn't seem to work with o1js
