@@ -26,7 +26,7 @@ export let dnaSeq = new ZKSeq(dnaSample);
 let dnaFieldArray = dnaSeq.toFieldArray();
 export class DnaFieldArray extends DynamicArray(Field, dnaLength) {}
 
-export class GeneProof extends SmartContract {
+export class BruteForceVerifier extends SmartContract {
   @state(Field) geneHash = State<Field>();
   @state(Field) dnaSeqSize = State<Field>();
   @state(Field) geneSeqSize = State<Field>();
@@ -48,7 +48,7 @@ export class GeneProof extends SmartContract {
     let loopSize = dnaSeqSize - geneSeqSize + 1;
     let geneFound = Field(0);
     Field(loopSize).assertGreaterThan(0);
-    Provable.log(loopSize);
+    //Provable.log(loopSize);
 
     for (let i = 0; i < loopSize; i++) {
       let base: Field = dnaSeq.get(Field(i));
@@ -65,13 +65,13 @@ export class GeneProof extends SmartContract {
           matchCount
         );
 
-        Provable.log(
-          i + j,
-          'dnaBase.equals(geneBase)',
-          dnaBase.equals(geneBase),
-          'matchCount',
-          matchCount
-        );
+        // Provable.log(
+        //   i + j,
+        //   'dnaBase.equals(geneBase)',
+        //   dnaBase.equals(geneBase),
+        //   'matchCount',
+        //   matchCount
+        // );
         //TODO: stop execution at first unmatched to avoid unecesseraly looping
       }
 
@@ -81,20 +81,19 @@ export class GeneProof extends SmartContract {
         geneFound.add(0)
       );
 
-      Provable.log('geneFound', geneFound);
+      //Provable.log('geneFound', geneFound);
 
       geneFound.assertGreaterThan(0);
     }
   }
 
-  //TODO: prove presence of gene variant with parameter variant limit , variant range (ie: presence of a variant in a specific range)
   @method verifyMutation(dnaSeq: DnaFieldArray, geneSeq: GeneFieldArray) {
     let dnaSeqSize = dnaSeq.maxLength();
     let geneSeqSize = geneSeq.maxLength();
     let loopSize = dnaSeqSize - geneSeqSize + 1;
     let variantFound = Field(0);
     Field(loopSize).assertGreaterThan(0);
-    Provable.log(loopSize);
+    //Provable.log(loopSize);
 
     //for now we only look for SNPs
     let variantMaxSize = Field(1);
@@ -122,13 +121,13 @@ export class GeneProof extends SmartContract {
           variantCount.add(1)
         );
 
-        Provable.log(
-          i + j,
-          'dnaBase.equals(geneBase)',
-          dnaBase.equals(geneBase),
-          'matchCount',
-          matchCount
-        );
+        // Provable.log(
+        //   i + j,
+        //   'dnaBase.equals(geneBase)',
+        //   dnaBase.equals(geneBase),
+        //   'matchCount',
+        //   matchCount
+        // );
         //TODO: stop execution at first unmatched to avoid unecesseraly looping
       }
 
@@ -141,7 +140,7 @@ export class GeneProof extends SmartContract {
         variantCount.add(0)
       );
 
-      Provable.log('variantFound', variantFound);
+      //Provable.log('variantFound', variantFound);
 
       variantFound.assertGreaterThan(0);
     }

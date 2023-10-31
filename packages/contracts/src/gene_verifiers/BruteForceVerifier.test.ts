@@ -1,10 +1,10 @@
 import {
-  GeneProof,
+  BruteForceVerifier,
   dnaSeq,
   geneSeq,
   GeneFieldArray,
   DnaFieldArray,
-} from './GeneProof';
+} from './BruteForceVerifier';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
 import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 /*
@@ -16,17 +16,17 @@ import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 
 let proofsEnabled = false;
 
-describe('GeneProof', () => {
+describe('BruteForceVerifier', () => {
   let deployerAccount: PublicKey,
     deployerKey: PrivateKey,
     senderAccount: PublicKey,
     senderKey: PrivateKey,
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
-    zkApp: GeneProof;
+    zkApp: BruteForceVerifier;
 
   beforeAll(async () => {
-    if (proofsEnabled) await GeneProof.compile();
+    if (proofsEnabled) await BruteForceVerifier.compile();
   });
 
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('GeneProof', () => {
       Local.testAccounts[1]);
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
-    zkApp = new GeneProof(zkAppAddress);
+    zkApp = new BruteForceVerifier(zkAppAddress);
   });
 
   async function localDeploy() {
@@ -53,7 +53,7 @@ describe('GeneProof', () => {
     await txn.sign([deployerKey, zkAppPrivateKey]).send();
   }
 
-  it('generates and deploys the `GeneProof` smart contract', async () => {
+  it('generates and deploys the `BruteForceVerifier` smart contract', async () => {
     await localDeploy();
     const deployedGeneHash = zkApp.geneHash.get();
     let gene = 'ATT';

@@ -1,3 +1,3 @@
-import { GeneProof } from './GeneProof.js';
+import { BruteForceVerifier } from './gene_verifiers/BruteForceVerifier';
 
-export { GeneProof as Add };
+export { BruteForceVerifier };
