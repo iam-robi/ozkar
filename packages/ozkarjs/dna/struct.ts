@@ -7,26 +7,15 @@ import {
 
 import { DynamicArray } from "../utils/dynamicArray";
 export class ZKSeq extends Struct({
-  dna: CircuitString,
+  seq: CircuitString,
 }) {
-  constructor(dnaString: string) {
-    super({ dna: dnaString });
-  }
-  toFields() {
-    return [...this.dna].map((base) => dnaBaseToField(base));
-  }
-  hash() {
-    return Poseidon.hash(this.toFields());
-  }
-
-  toFieldArray() {
-    class FieldArray extends DynamicArray(Field, this.toFields().length) {}
-    return FieldArray.from(this.toFields());
+  constructor(seqString: CircuitString) {
+    super({ seq: seqString });
   }
 
   merkleTree() {
     // Usage example
-    const dnaTree = constructMerkleMapForDNA(this.dna); // Or any other variable-length DNA string
+    const dnaTree = constructMerkleMapForDNA(this.seq.toString()); // Or any other variable-length DNA string
     return dnaTree;
     // This would give the first leaf of the Merkle tree
   }
