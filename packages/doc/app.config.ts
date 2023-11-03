@@ -4,13 +4,13 @@ export default defineAppConfig({
     description: "Private & trustless healthcare data framework",
     image: "/img/logo-horizontal.png",
     socials: {
-      twitter: "nuxt_js",
-      github: "nuxt-themes/docus",
-      nuxt: {
-        label: "Nuxt",
-        icon: "simple-icons:nuxtdotjs",
-        href: "https://nuxt.com",
-      },
+      // twitter: "nuxt_js",
+      github: "iam-robi/ozkar",
+      // nuxt: {
+      //   label: "Nuxt",
+      //   icon: "simple-icons:nuxtdotjs",
+      //   href: "https://nuxt.com",
+      // },
     },
     github: {
       dir: ".starters/default/content",
