@@ -1,3 +1,3 @@
 import { BruteForceVerifier } from './gene_verifiers/BruteForceVerifier';
-
-export { BruteForceVerifier };
+import { SegmentVerifier } from './gene_verifiers/SegmentVerifier';
+export { BruteForceVerifier, SegmentVerifier };

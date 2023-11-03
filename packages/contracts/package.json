@@ -50,6 +50,7 @@
   "type": "module",
   "types": "build/src/index.d.ts",
   "dependencies": {
+    "o1js": "0.14.*",
     "ozkarjs": "0.0.12"
   }
 }

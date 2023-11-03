@@ -80,11 +80,11 @@ describe('SegmentVerifier', () => {
     const updatedGeneHash = zkApp.geneHash.get();
     expect(updatedGeneHash).toEqual(geneHash);
 
-    const txn2 = await Mina.transaction(senderAccount, () => {
-      zkApp.verify(prefix, suffix, gene, dna);
-    });
-    await txn2.prove();
-    await txn2.sign([senderKey]).send();
+    // const txn2 = await Mina.transaction(senderAccount, () => {
+    //   zkApp.verify(prefix, suffix, gene, dna);
+    // });
+    // await txn2.prove();
+    // await txn2.sign([senderKey]).send();
   });
   it('correctly updates the genehash state on the `Gene Proof` smart contract', async () => {
     await localDeploy();

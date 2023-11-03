@@ -9,7 +9,8 @@ import {
   Poseidon,
 } from 'o1js';
 
-import { GeneProof } from '../src/GeneProof';
+import { BruteForceVerifier } from '../src/gene_verifiers/BruteForceVerifier';
+import { SegmentVerifier } from '../src/gene_verifiers/SegmentVerifier';
 
 let MINA_URL = process.env.MINA_URL || 'https://api.testnet.minaexplorer.com';
 
@@ -35,8 +36,8 @@ console.log(`Using fee payer account with nonce ${nonce}, balance ${balance}`);
 let zkappKey = PrivateKey.random();
 let zkappAddress = zkappKey.toPublicKey();
 
-let { verificationKey } = await GeneProof.compile();
-let zkapp = new GeneProof(zkappAddress);
+let { verificationKey } = await BruteForceVerifier.compile();
+let zkapp = new BruteForceVerifier(zkappAddress);
 console.log(`Deploying zkapp for public key ${zkappAddress.toBase58()}.`);
 
 console.log('Sending the transaction...');

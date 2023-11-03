@@ -13,12 +13,7 @@ import {
   Int64,
 } from 'o1js';
 
-import { ZKSeq } from 'ozkarjs';
 import { ZKSeq2 } from '../lib/dna';
-import { PoseidonLegacy } from 'o1js/dist/node/bindings/crypto/poseidon';
-let geneSample = 'ATT';
-export let geneSeq = new ZKSeq(geneSample);
-let geneHash = geneSeq.hash();
 
 export class SegmentVerifier extends SmartContract {
   @state(Field) geneHash = State<Field>();
@@ -46,10 +41,8 @@ export class SegmentVerifier extends SmartContract {
       ...suffix.seq.toFields().slice(0, suffix.seqLength),
     ];
 
-    let dnaFields = dna.seq.toFields().slice(0, 11);
+    let dnaFields = dna.seq.toFields().slice(0, dna.seqLength);
 
     Poseidon.hash(composedArray).assertEquals(Poseidon.hash(dnaFields));
-    //TODO: logic for larger dna strings and segments
-    //TODO: commit dna to dna tree, dna tree can prove presence of gene in multiple positions as well ( unique hashes of Poseidon.hash(prefixHash, suffixHash))
   }
 }

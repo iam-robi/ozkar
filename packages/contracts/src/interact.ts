@@ -14,7 +14,12 @@
  */
 import { Mina, PrivateKey } from 'o1js';
 import fs from 'fs/promises';
-import { GeneProof, geneSeq } from './GeneProof.js';
+import {
+  BruteForceVerifier,
+  geneSeq,
+} from './gene_verifiers/BruteForceVerifier';
+
+import { SegmentVerifier } from './gene_verifiers/SegmentVerifier';
 
 // check command line arg
 let deployAlias = process.argv[2];
@@ -58,12 +63,12 @@ const fee = Number(config.fee) * 1e9; // in nanomina (1 billion = 1.0 mina)
 Mina.setActiveInstance(Network);
 let feepayerAddress = feepayerKey.toPublicKey();
 let zkAppAddress = zkAppKey.toPublicKey();
-let zkApp = new GeneProof(zkAppAddress);
+let zkApp = new BruteForceVerifier(zkAppAddress);
 
 let sentTx;
 // compile the contract to create prover keys
 console.log('compile the contract...');
-await GeneProof.compile();
+await BruteForceVerifier.compile();
 try {
   // call update() and send transaction
   console.log('build transaction and create proof...');

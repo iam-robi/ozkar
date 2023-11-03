@@ -1,24 +1,29 @@
-import { Struct, Field, Circuit, CircuitString, Poseidon, UInt32 } from 'o1js';
+import { Struct, Field, CircuitString, MerkleMap, Character } from 'o1js';
 
-// Step 1: Create an Interface for DNAStruct
+// If MerkleMap is a class, make sure you're using it correctly
+// Confirm the correct usage with the o1js documentation
 
 export class ZKSeq2 extends Struct({
   seq: CircuitString,
-  seqLength: Number,
+  seqLength: Field,
+  // Specify the type for merkleMap; if it's a class, you might not include it here but instantiate it within the constructor
 }) {
+  merkleMap: MerkleMap; // Add the MerkleMap property to the class directly
+
   constructor(seqString: string) {
     super({
       seq: CircuitString.fromString(seqString),
-      seqLength: seqString.length,
+      seqLength: Field(seqString.length),
+      // Do not include merkleMap here if it's not part of the Struct definition
+    });
+
+    // Construct the MerkleMap instance within the constructor
+    this.merkleMap = new MerkleMap();
+    [...seqString].forEach((base, index) => {
+      const fieldVal = Character.fromString(base);
+      this.merkleMap.set(Field(index), fieldVal.toField());
     });
   }
 
-  //   merkleTree() {
-  //     // Usage example
-  //     const dnaTree = constructMerkleMapForDNA(this.seq.toString()); // Or any other variable-length DNA string
-  //     return dnaTree;
-  //     // This would give the first leaf of the Merkle tree
-  //   }
-
-  //TODO: make merkle tree get nucleid acid at position x, get reverse complement
+  // Additional methods...
 }
