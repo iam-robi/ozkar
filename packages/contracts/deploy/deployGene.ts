@@ -9,8 +9,8 @@ import {
   Poseidon,
 } from 'o1js';
 
-import { BruteForceVerifier } from '../src/gene_verifiers/BruteForceVerifier';
-import { SegmentVerifier } from '../src/gene_verifiers/SegmentVerifier';
+import { BruteForceVerifier } from '../src/sequence_verifiers/BruteForceVerifier';
+import { SegmentVerifier } from '../src/sequence_verifiers/SegmentVerifier';
 
 let MINA_URL = process.env.MINA_URL || 'https://api.testnet.minaexplorer.com';
 

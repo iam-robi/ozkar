@@ -17,9 +17,9 @@ import fs from 'fs/promises';
 import {
   BruteForceVerifier,
   geneSeq,
-} from './gene_verifiers/BruteForceVerifier';
+} from './sequence_verifiers/BruteForceVerifier';
 
-import { SegmentVerifier } from './gene_verifiers/SegmentVerifier';
+import { SegmentVerifier } from './sequence_verifiers/SegmentVerifier';
 
 // check command line arg
 let deployAlias = process.argv[2];
