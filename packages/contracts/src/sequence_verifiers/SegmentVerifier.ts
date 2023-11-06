@@ -4,16 +4,14 @@ import {
   state,
   State,
   method,
-  Provable,
-  UInt32,
-  Circuit,
-  Bool,
-  Poseidon,
-  CircuitString,
-  Int64,
+  Provable
 } from 'o1js';
 
 import { ZKSeq2 } from '../lib/dna';
+import { DynamicArray } from '../lib/dynamicArray';
+//Size where I don't get timeout erros in test, to improve...
+export const sequenceStandardSize = 20 
+export class SequenceFieldArray extends DynamicArray(Field, sequenceStandardSize) {}
 
 export class SegmentVerifier extends SmartContract {
   @state(Field) geneHash = State<Field>();
@@ -30,19 +28,13 @@ export class SegmentVerifier extends SmartContract {
     this.geneHash.set(newGeneHash);
   }
 
-  // @method verify(prefix: ZKSeq2, suffix: ZKSeq2, gene: ZKSeq2, dna: ZKSeq2) {
-  //   let prefixHash = prefix.seq.hash();
-  //   const stateGene = this.geneHash.getAndAssertEquals();
-  //   stateGene.assertEquals(gene.seq.hash());
-
-  //   const composedArray = [
-  //     ...prefix.seq.toFields().slice(0, prefix.seqLength),
-  //     ...gene.seq.toFields().slice(0, gene.seqLength),
-  //     ...suffix.seq.toFields().slice(0, suffix.seqLength),
-  //   ];
-
-  //   let dnaFields = dna.seq.toFields().slice(0, dna.seqLength);
-
-  //   Poseidon.hash(composedArray).assertEquals(Poseidon.hash(dnaFields));
-  // }
+  @method verifySegment(prefix: SequenceFieldArray,  suffix: SequenceFieldArray,  gene: SequenceFieldArray,   dna: SequenceFieldArray ) {
+   
+    const stateGeneHash = this.geneHash.getAndAssertEquals();
+    stateGeneHash.assertEquals(gene.hash());
+    const concatenatedHash = prefix.concat(gene).concat(suffix).hash();
+    const dnaHash = dna.hash();
+    Provable.log(prefix.concat(gene).concat(suffix).get(Field(10)))
+    dnaHash.assertEquals(concatenatedHash);
+  }
 }

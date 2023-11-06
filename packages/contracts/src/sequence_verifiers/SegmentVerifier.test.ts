@@ -1,4 +1,4 @@
-import { SegmentVerifier } from './SegmentVerifier';
+import { SegmentVerifier , SequenceFieldArray } from './SegmentVerifier';
 import {
   Field,
   Mina,
@@ -11,7 +11,6 @@ import {
   Encoding,
   Int64,
 } from 'o1js';
-import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 import { ZKSeq2 } from '../lib/dna';
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
@@ -29,7 +28,11 @@ describe('SegmentVerifier', () => {
     senderKey: PrivateKey,
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
-    zkApp: SegmentVerifier;
+    zkApp: SegmentVerifier,
+    gene: ZKSeq2,
+    dna: ZKSeq2,
+    prefix: ZKSeq2,
+    suffix: ZKSeq2
 
   beforeAll(async () => {
     if (proofsEnabled) await SegmentVerifier.compile();
@@ -45,6 +48,10 @@ describe('SegmentVerifier', () => {
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
     zkApp = new SegmentVerifier(zkAppAddress);
+    gene = new ZKSeq2('ATT');
+    dna = new ZKSeq2('ATCGATTACCG');
+    prefix = new ZKSeq2('ATCG');
+    suffix = new ZKSeq2('ACCG');
   });
 
   async function localDeploy() {
@@ -61,15 +68,10 @@ describe('SegmentVerifier', () => {
     const deployedGeneHash = zkApp.geneHash.get();
     expect(deployedGeneHash).toEqual(Field(0));
   });
-
-  it('correctly updates the genehash state on the `Gene Proof` smart contract and verify segment', async () => {
+  it('correctly updates the genehash of verifier and verifies segment', async () => {
     await localDeploy();
-    let gene = new ZKSeq2('ATT');
-    let dna = new ZKSeq2('ATCGATTACCG');
-    let prefix = new ZKSeq2('ATCG');
-    let suffix = new ZKSeq2('ACCG');
 
-    let geneHash = gene.seq.hash();
+    let geneHash:Field = new SequenceFieldArray(gene.fieldList).hash()
 
     const txn = await Mina.transaction(senderAccount, () => {
       zkApp.update(geneHash);
@@ -80,19 +82,21 @@ describe('SegmentVerifier', () => {
     const updatedGeneHash = zkApp.geneHash.get();
     expect(updatedGeneHash).toEqual(geneHash);
 
-    // const txn2 = await Mina.transaction(senderAccount, () => {
-    //   zkApp.verify(prefix, suffix, gene, dna);
-    // });
-    // await txn2.prove();
-    // await txn2.sign([senderKey]).send();
-  });
-  it('correctly updates the genehash state on the `Gene Proof` smart contract', async () => {
-    await localDeploy();
 
-    // const txn2 = await Mina.transaction(senderAccount, () => {
-    //   zkApp.verify(prefixHash, suffixHash, fullSeqHash);
-    // });
-    // await txn.prove();
-    // await txn.sign([senderKey]).send();
+
+    const txn2 = await Mina.transaction(senderAccount, () => {
+      zkApp.verifySegment( 
+       SequenceFieldArray.from(prefix.fieldList),
+      
+       SequenceFieldArray.from(suffix.fieldList),
+    
+       SequenceFieldArray.from(gene.fieldList),
+       
+       SequenceFieldArray.from(dna.fieldList),
+       )
+    });
+    await txn2.prove();
+    await txn2.sign([senderKey]).send();
   });
+
 });
