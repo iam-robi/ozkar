@@ -12,11 +12,11 @@
  * Build the project: `$ npm run build`
  * Run with node:     `$ node build/src/interact.js <deployAlias>`.
  */
-import { Mina, PrivateKey } from 'o1js';
+import { Mina, PrivateKey, Field } from 'o1js';
 import fs from 'fs/promises';
 import {
   BruteForceVerifier,
-  geneSeq,
+
 } from './sequence_verifiers/BruteForceVerifier';
 
 import { SegmentVerifier } from './sequence_verifiers/SegmentVerifier';
@@ -72,9 +72,9 @@ await BruteForceVerifier.compile();
 try {
   // call update() and send transaction
   console.log('build transaction and create proof...');
-  let geneHash = geneSeq.hash();
+  
   let tx = await Mina.transaction({ sender: feepayerAddress, fee }, () => {
-    zkApp.update(geneHash);
+    zkApp.update(Field(0));
   });
   await tx.prove();
   console.log('send transaction...');

@@ -8,6 +8,13 @@
       "feepayerAlias": "dev1",
       "fee": "0.1",
       "smartContract": "GeneProof"
+    },
+    "berkeley2": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/berkeley2.json",
+      "feepayerKeyPath": "/Users/samantha.rakotopare/.cache/zkapp-cli/keys/berk2.json",
+      "feepayerAlias": "berk2",
+      "fee": "0.1"
     }
   }
 }

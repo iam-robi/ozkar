@@ -45,7 +45,8 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "testw": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "lint": "npx eslint src/* --fix",
-    "deploy:gene": "bun run deploy/deployGene.ts"
+    "deploy:bf": "bun run deploy/deployBruteForceVerifier.ts",
+    "deploy:segment": "bun run deploy/deploySegmenterifier.ts"
   },
   "type": "module",
   "types": "build/src/index.d.ts",
