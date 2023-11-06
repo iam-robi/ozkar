@@ -1,13 +1,10 @@
 import { BruteForceVerifier } from './BruteForceVerifier';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
-import { dnaBaseToField, ZKSeq } from 'ozkarjs';
 
 import { ZKSeq2 } from '../lib/dna';
 import {
   SequenceFieldArray,
   PatternFieldArray,
-  sequenceSize,
-  patternSize,
 } from './BruteForceVerifier';
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
@@ -27,7 +24,8 @@ describe('BruteForceVerifier', () => {
     zkAppPrivateKey: PrivateKey,
     zkApp: BruteForceVerifier,
     gene: ZKSeq2,
-    dna: ZKSeq2;
+    dna: ZKSeq2,
+    dnaWithVariant: ZKSeq2;
 
   beforeAll(async () => {
     if (proofsEnabled) await BruteForceVerifier.compile();
@@ -45,6 +43,7 @@ describe('BruteForceVerifier', () => {
     zkApp = new BruteForceVerifier(zkAppAddress);
     gene = new ZKSeq2('ATTATT');
     dna = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATTATTG');
+    dnaWithVariant = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATGATTG');
   });
 
   async function localDeploy() {
@@ -83,6 +82,24 @@ describe('BruteForceVerifier', () => {
     const txn2 = await Mina.transaction(senderAccount, () => {
       zkApp.verify(
         SequenceFieldArray.from(dna.fieldList),
+        PatternFieldArray.from(gene.fieldList)
+      );
+    });
+
+    await txn2.prove();
+    await txn2.sign([senderKey]).send();
+  });
+  it('correctly proove mutated gene', async () => {
+    await localDeploy();
+    // verify transaction
+    const txn = await Mina.transaction(senderAccount, () => {
+      zkApp.update(gene.seq.hash());
+    });
+    await txn.prove();
+    await txn.sign([senderKey]).send();
+    const txn2 = await Mina.transaction(senderAccount, () => {
+      zkApp.verifyMutation(
+        SequenceFieldArray.from(dnaWithVariant.fieldList),
         PatternFieldArray.from(gene.fieldList)
       );
     });
