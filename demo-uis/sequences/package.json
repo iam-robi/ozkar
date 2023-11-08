@@ -11,11 +11,16 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxtjs/color-mode": "^3.3.0",
+    "@nuxtjs/tailwindcss": "^6.9.4",
+    "daisyui": "^3.9.4",
     "nuxt": "^3.8.1",
+    "tailwindcss-aspect-ratio": "^3.0.0",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@nuxt/ui": "^2.10.0"
+    "@pinia/nuxt": "^0.5.1",
+    "pinia": "^2.1.7"
   }
 }
