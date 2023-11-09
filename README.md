@@ -7,6 +7,11 @@ You are on the js framework repo. Other components are:
 **Documentation**: https://docs.ozkar.io
 **Playground**: https://playground.ozkar.io
 
+As early stage a first module is at POC stage the sequence-verifier module.
+
+```
+yarn add @ozkarjs/sequence-verifiers
+```
 
 ### Sequence verifiers
 
