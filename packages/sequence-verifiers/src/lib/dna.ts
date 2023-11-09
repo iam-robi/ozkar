@@ -4,7 +4,7 @@ import {
   CircuitString,
   MerkleMap,
   Character,
-  Circuit,
+
 } from 'o1js';
 export class ZKSeq2 extends Struct({
   seq: CircuitString,

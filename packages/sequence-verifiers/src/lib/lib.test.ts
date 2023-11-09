@@ -1,13 +1,6 @@
 import {
   Field,
-  Mina,
-  PrivateKey,
-  PublicKey,
-  AccountUpdate,
   CircuitString,
-  Poseidon,
-  Struct,
-  Encoding,
   Character,
 } from 'o1js';
 
@@ -18,7 +11,7 @@ describe('Lib Testing', () => {
     //if (proofsEnabled) await SegmentVerifier.compile();
   });
 
-  beforeEach(() => {});
+  // beforeEach(() => {});
 
   it('creates a hashable circuit string with ZKSeq2', async () => {
     let dna = new ZKSeq2('ATT');

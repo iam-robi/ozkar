@@ -20,7 +20,7 @@
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
-    "o1js": "0.13.*"
+    "o1js": "0.14.*"
   },
   "description": "",
   "keywords": [
@@ -46,7 +46,7 @@
     "testw": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "lint": "npx eslint src/* --fix",
     "deploy:bf": "bun run deploy/deployBruteForceVerifier.ts",
-    "deploy:segment": "bun run deploy/deploySegmenterifier.ts"
+    "deploy:segment": "bun run deploy/deploySegmentVerifier.ts"
   },
   "type": "module",
   "types": "build/src/index.d.ts",

@@ -5,11 +5,6 @@ import {
   PrivateKey,
   PublicKey,
   AccountUpdate,
-  CircuitString,
-  Poseidon,
-  Struct,
-  Encoding,
-  Int64,
 } from 'o1js';
 import { ZKSeq2 } from '../lib/dna';
 /*

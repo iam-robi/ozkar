@@ -1,20 +1,16 @@
 import {
-    Field,
     AccountUpdate,
     fetchAccount,
     PrivateKey,
     Mina,
-    PublicKey,
-    UInt64,
-    Poseidon,
   } from 'o1js';
   
   import { SegmentVerifier } from '../src/sequence_verifiers/SegmentVerifier';
   
-  let MINA_URL = process.env.MINA_URL || 'https://api.testnet.minaexplorer.com';
+  //let MINA_URL = process.env.MINA_URL || 'https://api.testnet.minaexplorer.com';
   
-  // use local blockchain or Berkeley
-  const useLocal: boolean = false;
+  // // use local blockchain or Berkeley
+  // const useLocal = false;
   
   const transactionFee = 150_000_000;
   
@@ -36,6 +32,7 @@ import {
   let zkappAddress = zkappKey.toPublicKey();
   
   let { verificationKey } = await SegmentVerifier.compile();
+
   let zkapp = new SegmentVerifier(zkappAddress);
   console.log(`Deploying zkapp for public key ${zkappAddress.toBase58()}.`);
   

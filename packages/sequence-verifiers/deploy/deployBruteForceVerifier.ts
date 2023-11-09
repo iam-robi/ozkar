@@ -15,7 +15,7 @@ import { SegmentVerifier } from '../src/sequence_verifiers/SegmentVerifier';
 let MINA_URL = process.env.MINA_URL || 'https://api.testnet.minaexplorer.com';
 
 // use local blockchain or Berkeley
-const useLocal: boolean = false;
+const useLocal = false;
 
 const transactionFee = 150_000_000;
 

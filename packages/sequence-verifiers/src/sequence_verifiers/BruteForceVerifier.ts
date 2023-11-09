@@ -5,10 +5,6 @@ import {
   State,
   method,
   Provable,
-  UInt32,
-  Circuit,
-  Bool,
-  Character,
 } from 'o1js';
 
 import { DynamicArray } from '../lib/dynamicArray';
@@ -27,7 +23,6 @@ export class BruteForceVerifier extends SmartContract {
   }
 
   @method update(newGeneHash: Field) {
-    const currentState = this.geneHash.getAndAssertEquals();
     this.geneHash.set(newGeneHash);
   }
 
@@ -36,8 +31,6 @@ export class BruteForceVerifier extends SmartContract {
 
     let patternFound = Field(0);
     for (let i = 0; i < loopSize; i++) {
-      let base: Field = dna.get(Field(i));
-
       let matchCount: Field = Field(0);
       for (let j = 0; j < patternSize; j++) {
         let patternBase: Field = gene.get(Field(j));
@@ -68,7 +61,6 @@ export class BruteForceVerifier extends SmartContract {
     let patternFound = Field(0);
     let variantFound = Field(0);
     for (let i = 0; i < loopSize; i++) {
-      let base: Field = dna.get(Field(i));
 
       let matchCount: Field = Field(0);
       for (let j = 0; j < patternSize; j++) {

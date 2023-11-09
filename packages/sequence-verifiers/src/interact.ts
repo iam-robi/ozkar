@@ -19,7 +19,7 @@ import {
 
 } from './sequence_verifiers/BruteForceVerifier';
 
-import { SegmentVerifier } from './sequence_verifiers/SegmentVerifier';
+
 
 // check command line arg
 let deployAlias = process.argv[2];

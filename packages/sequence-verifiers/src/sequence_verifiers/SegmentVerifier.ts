@@ -7,7 +7,7 @@ import {
   Provable
 } from 'o1js';
 
-import { ZKSeq2 } from '../lib/dna';
+
 import { DynamicArray } from '../lib/dynamicArray';
 //Size where I don't get timeout erros in test, to improve...
 export const sequenceStandardSize = 20 
@@ -24,7 +24,6 @@ export class SegmentVerifier extends SmartContract {
   }
 
   @method update(newGeneHash: Field) {
-    const currentState = this.geneHash.getAndAssertEquals();
     this.geneHash.set(newGeneHash);
   }
 
