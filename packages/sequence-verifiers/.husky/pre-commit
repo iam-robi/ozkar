@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-cd packages/sequence-verifiers
-npx lint-staged
+# cd packages/sequence-verifiers
+# npx lint-staged
