@@ -1,5 +1,5 @@
 {
-  "name": "@ozkar/sequence-verifiers",
+  "name": "@ozkarjs/sequence-verifiers",
   "version": "0.1.0",
   "author": "",
   "main": "build/src/index.js",
@@ -41,7 +41,7 @@
     "buildw": "tsc --watch",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "format": "prettier --write --ignore-unknown **/*",
-    "prepare": "cd .. && husky install contracts/.husky",
+    "prepare": "cd ../.. && husky install packages/sequence-verifiers/.husky",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "testw": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "lint": "npx eslint src/* --fix",
@@ -50,6 +50,9 @@
   },
   "type": "module",
   "types": "build/src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "o1js": "0.14.*"
   }
