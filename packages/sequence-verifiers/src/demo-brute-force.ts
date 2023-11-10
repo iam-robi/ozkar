@@ -12,7 +12,7 @@ import {
   Account,
   AccountUpdate,
 } from 'o1js';
-import { ZKSeq2 } from './lib/dna';
+import { ZKSeq } from './lib/dna';
 
 const fee = Number('0.1') * 1e9;
 let Berkeley = Mina.Network('https://proxy.berkeley.minaexplorer.com/graphql');
@@ -22,9 +22,9 @@ let feePayerKey = PrivateKey.fromBase58(
   process.env.DEPLOYER_PRIVATE_KEY as string
 );
 
-const gene = new ZKSeq2('ATTATT');
-const dna = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATTATTG');
-const dnaWithVariant = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATGATTG');
+const gene = new ZKSeq('ATTATT');
+const dna = new ZKSeq('ATCGTCAGTGGAATTGATCGTCAGTATTATTG');
+const dnaWithVariant = new ZKSeq('ATCGTCAGTGGAATTGATCGTCAGTATGATTG');
 const geneHash = PatternFieldArray.from(gene.fieldList).hash();
 const zkAppAddress = PublicKey.fromBase58(
   'B62qpWAr1nJ6WNCZnAUsWPXPAhT9nDNRQAZvuM1vQ6gDjgQKCqCMPxr'

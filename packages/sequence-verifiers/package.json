@@ -1,6 +1,6 @@
 {
   "name": "@ozkarjs/sequence-verifiers",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "author": "",
   "main": "build/src/index.js",
   "devDependencies": {

@@ -1,10 +1,6 @@
-import {
-  Field,
-  CircuitString,
-  Character,
-} from 'o1js';
+import { Field, CircuitString, Character } from 'o1js';
 
-import { ZKSeq2 } from './dna';
+import { ZKSeq } from './dna';
 
 describe('Lib Testing', () => {
   beforeAll(async () => {
@@ -14,13 +10,13 @@ describe('Lib Testing', () => {
   // beforeEach(() => {});
 
   it('creates a hashable circuit string with ZKSeq2', async () => {
-    let dna = new ZKSeq2('ATT');
+    let dna = new ZKSeq('ATT');
     let dnaHash = dna.seq.hash();
     expect(dnaHash).toEqual(CircuitString.fromString('ATT').hash());
   });
 
   it('creates a MerkleMap', async () => {
-    let dna = new ZKSeq2('ATCG');
+    let dna = new ZKSeq('ATCG');
     let merkleMap = dna.merkleMap;
     expect(merkleMap.get(Field(0))).toEqual(
       Character.fromString('A').toField()

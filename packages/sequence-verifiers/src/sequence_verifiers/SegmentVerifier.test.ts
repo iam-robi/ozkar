@@ -1,12 +1,6 @@
-import { SegmentVerifier , SequenceFieldArray } from './SegmentVerifier';
-import {
-  Field,
-  Mina,
-  PrivateKey,
-  PublicKey,
-  AccountUpdate,
-} from 'o1js';
-import { ZKSeq2 } from '../lib/dna';
+import { SegmentVerifier, SequenceFieldArray } from './SegmentVerifier';
+import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
+import { ZKSeq } from '../lib/dna';
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
  * with your own tests.
@@ -24,10 +18,10 @@ describe('SegmentVerifier', () => {
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
     zkApp: SegmentVerifier,
-    gene: ZKSeq2,
-    dna: ZKSeq2,
-    prefix: ZKSeq2,
-    suffix: ZKSeq2
+    gene: ZKSeq,
+    dna: ZKSeq,
+    prefix: ZKSeq,
+    suffix: ZKSeq;
 
   beforeAll(async () => {
     if (proofsEnabled) await SegmentVerifier.compile();
@@ -43,10 +37,10 @@ describe('SegmentVerifier', () => {
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
     zkApp = new SegmentVerifier(zkAppAddress);
-    gene = new ZKSeq2('ATT');
-    dna = new ZKSeq2('ATCGATTACCG');
-    prefix = new ZKSeq2('ATCG');
-    suffix = new ZKSeq2('ACCG');
+    gene = new ZKSeq('ATT');
+    dna = new ZKSeq('ATCGATTACCG');
+    prefix = new ZKSeq('ATCG');
+    suffix = new ZKSeq('ACCG');
   });
 
   async function localDeploy() {
@@ -66,7 +60,7 @@ describe('SegmentVerifier', () => {
   it('correctly updates the genehash of verifier and verifies segment', async () => {
     await localDeploy();
 
-    let geneHash:Field = new SequenceFieldArray(gene.fieldList).hash()
+    let geneHash: Field = new SequenceFieldArray(gene.fieldList).hash();
 
     const txn = await Mina.transaction(senderAccount, () => {
       zkApp.update(geneHash);
@@ -77,21 +71,18 @@ describe('SegmentVerifier', () => {
     const updatedGeneHash = zkApp.geneHash.get();
     expect(updatedGeneHash).toEqual(geneHash);
 
-
-
     const txn2 = await Mina.transaction(senderAccount, () => {
-      zkApp.verifySegment( 
-       SequenceFieldArray.from(prefix.fieldList),
-      
-       SequenceFieldArray.from(suffix.fieldList),
-    
-       SequenceFieldArray.from(gene.fieldList),
-       
-       SequenceFieldArray.from(dna.fieldList),
-       )
+      zkApp.verifySegment(
+        SequenceFieldArray.from(prefix.fieldList),
+
+        SequenceFieldArray.from(suffix.fieldList),
+
+        SequenceFieldArray.from(gene.fieldList),
+
+        SequenceFieldArray.from(dna.fieldList)
+      );
     });
     await txn2.prove();
     await txn2.sign([senderKey]).send();
   });
-
 });

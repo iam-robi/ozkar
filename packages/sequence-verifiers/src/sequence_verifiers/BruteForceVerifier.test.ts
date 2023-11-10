@@ -1,11 +1,8 @@
 import { BruteForceVerifier } from './BruteForceVerifier';
 import { Field, Mina, PrivateKey, PublicKey, AccountUpdate } from 'o1js';
 
-import { ZKSeq2 } from '../lib/dna';
-import {
-  SequenceFieldArray,
-  PatternFieldArray,
-} from './BruteForceVerifier';
+import { ZKSeq } from '../lib/dna';
+import { SequenceFieldArray, PatternFieldArray } from './BruteForceVerifier';
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
  * with your own tests.
@@ -23,9 +20,9 @@ describe('BruteForceVerifier', () => {
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
     zkApp: BruteForceVerifier,
-    gene: ZKSeq2,
-    dna: ZKSeq2,
-    dnaWithVariant: ZKSeq2;
+    gene: ZKSeq,
+    dna: ZKSeq,
+    dnaWithVariant: ZKSeq;
 
   beforeAll(async () => {
     if (proofsEnabled) await BruteForceVerifier.compile();
@@ -41,9 +38,9 @@ describe('BruteForceVerifier', () => {
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
     zkApp = new BruteForceVerifier(zkAppAddress);
-    gene = new ZKSeq2('ATTATT');
-    dna = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATTATTG');
-    dnaWithVariant = new ZKSeq2('ATCGTCAGTGGAATTGATCGTCAGTATGATTG');
+    gene = new ZKSeq('ATTATT');
+    dna = new ZKSeq('ATCGTCAGTGGAATTGATCGTCAGTATTATTG');
+    dnaWithVariant = new ZKSeq('ATCGTCAGTGGAATTGATCGTCAGTATGATTG');
   });
 
   async function localDeploy() {

@@ -1,12 +1,5 @@
-import {
-  Struct,
-  Field,
-  CircuitString,
-  MerkleMap,
-  Character,
-
-} from 'o1js';
-export class ZKSeq2 extends Struct({
+import { Struct, Field, CircuitString, MerkleMap, Character } from 'o1js';
+export class ZKSeq extends Struct({
   seq: CircuitString,
   seqLength: Field,
   fieldList: [Field],
