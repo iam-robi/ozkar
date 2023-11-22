@@ -1,0 +1,16 @@
+{
+  "name": "chain-utils",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@pinata/sdk": "^2.1.0",
+    "bs58": "^5.0.0",
+    "o1js": "^0.14.2"
+  }
+}
