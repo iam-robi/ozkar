@@ -1,5 +1,5 @@
 {
-  "name": "@ozkarjs/vhis",
+  "name": "@ozkarjs/vhir",
   "version": "0.1.5",
   "author": "",
   "main": "build/src/index.js",
