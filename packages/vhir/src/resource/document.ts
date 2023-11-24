@@ -15,7 +15,11 @@ interface ZKDocumentInitArgs {
   cid: CircuitString;
   id: Field;
 }
-
+interface IZKDocument {
+  resourceType: CircuitString;
+  cid: CircuitString;
+  id: Field;
+}
 export class ZKDocument extends Struct({
   resourceType: CircuitString,
   cid: CircuitString,
