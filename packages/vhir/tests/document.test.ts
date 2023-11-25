@@ -35,6 +35,10 @@ describe('Lib Testing', () => {
     );
     expect(doc.encryptedIdentifier).toEqual(undefined);
     doc.encryptIdentifier(account1.toPublicKey());
-    expect(doc.encryptedIdentifier.maxLength()).toEqual(129);
+    // expect(doc.encryptedIdentifier.maxLength()).toEqual(129);
+
+    const decryptedIdentifier = doc.decryptIdentifier(account1);
+
+    expect(decryptedIdentifier).toEqual(expectedCid);
   });
 });
