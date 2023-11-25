@@ -1,6 +1,6 @@
 import { ZKConsent, ConsentSignerKind } from '../src/resource/consent';
 //import type { ConsentSignerKind } from '../src/resource/consent';
-import { ZKDocument } from '../src/resource/document';
+import { DocumentReference } from '../src/resource/document';
 
 import { Field, CircuitString, Character, PrivateKey, Signature } from 'o1js';
 
@@ -14,14 +14,14 @@ describe('Lib Testing', () => {
     //if (proofsEnabled) await SegmentVerifier.compile();
   });
 
-  it('creates zkdocument and a consent without a controller', async () => {
-    const doc = await ZKDocument.init(
+  it('creates DocumentReference and a consent without a controller', async () => {
+    const doc = await DocumentReference.init(
       'tests/data/sampleagreement.json',
       'json'
     );
-    const docCid = doc.cid.toString();
+    const docCid = doc.identifier.toString();
 
-    const consentMetadata = await ZKDocument.init(
+    const consentMetadata = await DocumentReference.init(
       'tests/data/samplemetadata.json',
       'json'
     );
@@ -30,5 +30,16 @@ describe('Lib Testing', () => {
     const consent = await ZKConsent.init(docCid, grantorAccount.toPublicKey());
 
     consent.sign(grantorAccount, ConsentSignerKind._grantor);
+
+    const grantorSignature = consent.grantorSignature;
+    let verification = false;
+    if (grantorSignature instanceof Signature) {
+      const verificationResult = grantorSignature.verify(
+        grantorAccount.toPublicKey(),
+        consent.sourceReference.toFields()
+      );
+      verification = verificationResult.toBoolean();
+    }
+    expect(verification).toEqual(true);
   });
 });

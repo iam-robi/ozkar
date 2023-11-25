@@ -1,6 +1,13 @@
-import { ZKDocument } from '../src/resource/document';
+import { DocumentReference } from '../src/resource/document';
 import { ZKConsent } from '../src/resource/consent';
-import { Field, CircuitString, Character, PrivateKey, Signature } from 'o1js';
+import {
+  Field,
+  CircuitString,
+  Character,
+  PrivateKey,
+  Signature,
+  Encryption,
+} from 'o1js';
 
 describe('Lib Testing', () => {
   let account1: PrivateKey;
@@ -11,9 +18,23 @@ describe('Lib Testing', () => {
     //if (proofsEnabled) await SegmentVerifier.compile();
   });
 
-  it('creates zkdocument from document path', async () => {
+  it('creates DocumentReference from document path', async () => {
     const expectedCid = 'J1SEmUgGejuHTLMwcL5SwC9j9QA31ENRbyLA46FUyDFm';
-    const doc = await ZKDocument.init('tests/data/sampleprotocol.pdf', 'pdf');
-    expect(expectedCid).toEqual(doc.cid.toString());
+    const doc = await DocumentReference.init(
+      'tests/data/sampleprotocol.pdf',
+      'pdf'
+    );
+    expect(expectedCid).toEqual(doc.identifier.toString());
+  });
+
+  it('correctly encrypt identifier', async () => {
+    const expectedCid = 'J1SEmUgGejuHTLMwcL5SwC9j9QA31ENRbyLA46FUyDFm';
+    const doc = await DocumentReference.init(
+      'tests/data/sampleprotocol.pdf',
+      'pdf'
+    );
+    expect(doc.encryptedIdentifier).toEqual(undefined);
+    doc.encryptIdentifier(account1.toPublicKey());
+    expect(doc.encryptedIdentifier.maxLength()).toEqual(129);
   });
 });

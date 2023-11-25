@@ -29,7 +29,7 @@ export enum ConsentSignerKind {
 
 interface ZKConsentInitArgs {
   resourceType: CircuitString;
-  documentCid: CircuitString;
+  sourceReference: CircuitString;
   grantor: PublicKey;
   controller: PublicKey;
   dateTime: Field;
@@ -39,7 +39,7 @@ interface ZKConsentInitArgs {
 //Consent management - particularly privacy consent - is complicated by the fact that consent to share is often itself necessary to protect. The need to protect the privacy of the privacy statement itself competes with the execution of the consent statement. For this reason, it is common to deal with 'consent statements' that are only partial representations of the full consent statement that the patient provided.
 export class ZKConsent extends Struct({
   resourceType: CircuitString,
-  documentCid: CircuitString,
+  sourceReference: CircuitString,
   //The entity responsible for granting the rights listed in a Consent Directive.
   grantor: PublicKey,
   //The actor that controls/enforces the access according to the consent. Type	Reference(HealthcareService | Organization | Patient | Practitioner)
@@ -53,15 +53,17 @@ export class ZKConsent extends Struct({
   // publicMeta contains metadata that is public
   // publicMetaCid: CircuitString.fromString(''),
 }) {
-  private grantorSignature: Signature | Field = Field(0);
-  private controllerSignature: Signature | Field = Field(0);
+  public grantorSignature: Signature = Signature.create(PrivateKey.random(), [
+    Field(0),
+  ]);
+  public controllerSignature: Signature | Field = Field(0);
   private constructor(initArgs: ZKConsentInitArgs) {
     super(initArgs);
   }
 
   //initiated w/ empty signer
   static async init(
-    documentCid: string,
+    sourceReference: string,
     grantor: PublicKey,
     controller?: PublicKey
   ): Promise<ZKConsent> {
@@ -73,7 +75,7 @@ export class ZKConsent extends Struct({
 
     return new ZKConsent({
       resourceType: CircuitString.fromString('Consent'),
-      documentCid: CircuitString.fromString(documentCid),
+      sourceReference: CircuitString.fromString(sourceReference),
       grantor: grantor,
       controller: controller,
       dateTime: date,
@@ -85,14 +87,14 @@ export class ZKConsent extends Struct({
       assert(this.grantor.toBase58() === pvk.toPublicKey().toBase58());
       this.grantorSignature = Signature.create(
         pvk,
-        this.documentCid.toFields()
+        this.sourceReference.toFields()
       );
     }
     if (signerKind === ConsentSignerKind._controller) {
       assert(this.controller.toBase58() === pvk.toPublicKey().toBase58());
       this.controllerSignature = Signature.create(
         pvk,
-        this.documentCid.toFields()
+        this.sourceReference.toFields()
       );
     }
   }
