@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  backend:
+    container_name: ozkar-oracle
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+
+    #command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - ozkar-oracle-net
+    depends_on:
+      - redis
+      - database
+#    command:  sh -c "yarn migration:run && yarn build && yarn start:dev"
+
+    command:  sh -c "yarn build && yarn start:dev"
+  redis:
+    container_name: ozkar-oracle-redis
+    image: redis:5
+    networks:
+      - ozkar-oracle-net
+    ports:
+      - 6379:6379
+
+  database:
+    container_name: ozkar-oracle-db
+    networks:
+      - ozkar-oracle-net
+    image: postgres:11.13
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE}
+    #      PG_DATA: /var/lib/postgresql/data_graphql/
+    volumes:
+      #use this to easily share db volume with other users
+      - ozkar-oracle:/var/lib/postgresql/data
+    ports:
+      - ${PG_PORT}:5432
+
+networks:
+  ozkar-oracle-net:
+volumes:
+  ozkar-oracle:
+  node_mod:
