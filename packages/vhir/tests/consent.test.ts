@@ -1,4 +1,4 @@
-import { ZKConsent, ConsentSignerKind } from '../src/resource/consent';
+import { Consent, ConsentSignerKind } from '../src/resource/consent';
 //import type { ConsentSignerKind } from '../src/resource/consent';
 import { DocumentReference } from '../src/resource/document';
 
@@ -27,7 +27,7 @@ describe('Lib Testing', () => {
     );
 
     //
-    const consent = await ZKConsent.init(docCid, grantorAccount.toPublicKey());
+    const consent = await Consent.init(docCid, grantorAccount.toPublicKey());
 
     consent.sign(grantorAccount, ConsentSignerKind._grantor);
 

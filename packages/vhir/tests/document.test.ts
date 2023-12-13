@@ -1,5 +1,5 @@
 import { DocumentReference } from '../src/resource/document';
-import { ZKConsent } from '../src/resource/consent';
+import { Consent } from '../src/resource/consent';
 import {
   Field,
   CircuitString,

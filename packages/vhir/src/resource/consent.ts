@@ -66,14 +66,14 @@ export class Consent extends Struct({
     sourceReference: string,
     grantor: PublicKey,
     controller?: PublicKey
-  ): Promise<ZKConsent> {
+  ): Promise<Consent> {
     const date: Field = Field(Date.now());
 
     if (!controller) {
       controller = PublicKey.empty();
     }
 
-    return new ZKConsent({
+    return new Consent({
       resourceType: CircuitString.fromString('Consent'),
       sourceReference: CircuitString.fromString(sourceReference),
       grantor: grantor,
