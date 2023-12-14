@@ -11,7 +11,7 @@ const config: Options = {
   password: process.env.DB_PASSWORD,
   host: process.env.DB_HOST,
   dbName: process.env.DB_DATABASE,
-  // port: Number(process.env.PG_PORT),
+  port: Number(process.env.PG_PORT),
   type: 'postgresql',
   debug: true,
   loadStrategy: LoadStrategy.JOINED,
