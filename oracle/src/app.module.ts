@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { UserModule } from './user/user.module';
+import { SignModule } from './sign/sign.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { UserModule } from './user/user.module';
       driver: ApolloDriver,
     }),
     UserModule,
+    SignModule,
   ],
   providers: [],
 })
