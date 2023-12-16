@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrivateKey, Signature, Field, Encoding, MerkleMap } from 'o1js';
 
-// import { TradingData } from '../exchange/dto/trading-data.response';
-// import { TrainingDataInput } from '../user/dto/training-data.input';
-
 @Injectable()
 export class SignService {
   constructor() {}
