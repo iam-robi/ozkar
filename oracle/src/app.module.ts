@@ -5,6 +5,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { UserModule } from './user/user.module';
 import { SignModule } from './sign/sign.module';
 import GraphQLJSON from 'graphql-type-json';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import GraphQLJSON from 'graphql-type-json';
     }),
     UserModule,
     SignModule,
+    AuthModule,
   ],
   providers: [],
 })
