@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { SignModule } from './sign/sign.module';
 import GraphQLJSON from 'graphql-type-json';
 import { AuthModule } from './auth/auth.module';
+import { AppleModule } from './apple/apple.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     SignModule,
     AuthModule,
+    AppleModule,
   ],
   providers: [],
 })
