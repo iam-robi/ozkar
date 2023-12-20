@@ -1,6 +1,27 @@
 version: '3.7'
 
 services:
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./certs/api.ozkar.io.crt:/certs/api.ozkar.io.crt"
+      - "./certs/api.ozkar.io.key:/certs/api.ozkar.io.key"
+    networks:
+      - ozkar-oracle-net
+
+
   backend:
     container_name: ozkar-oracle
     build:
@@ -23,6 +44,11 @@ services:
 #    command:  sh -c "yarn migration:run && yarn build && yarn start:dev"
 
     command:  sh -c "yarn build && yarn start:dev"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`ozkar.io`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
   redis:
     container_name: ozkar-oracle-redis
     image: redis:5
