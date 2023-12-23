@@ -1,14 +1,13 @@
-import {ObjectType, Field, Int, ID} from '@nestjs/graphql';
-import {Entity, PrimaryKey, Property} from "@mikro-orm/core";
-import {Gender} from "../enums";
-import * as crypto from "crypto";
+import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Gender } from '../enums';
+import * as crypto from 'crypto';
 
 @Entity()
 @ObjectType()
 export class User {
-
   @Field(() => ID)
-  @PrimaryKey({ type: 'uuid'})
+  @PrimaryKey({ type: 'uuid' })
   id: string = crypto.randomUUID();
 
   @Field({ nullable: true })
@@ -23,16 +22,20 @@ export class User {
   @Property({ nullable: true })
   email: string;
 
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  username: string;
+
   @Field()
   @Property()
   address: string;
 
   @Field({ nullable: true })
-  @Property({nullable: true})
+  @Property({ nullable: true })
   age: Number;
 
   @Field({ nullable: true })
-  @Property({nullable: true})
+  @Property({ nullable: true })
   gender: Gender;
 
   @Field(() => Date)
@@ -42,6 +45,4 @@ export class User {
   @Field(() => Date)
   @Property({ onUpdate: () => new Date() })
   updatedAt: Date = new Date();
-
-
 }

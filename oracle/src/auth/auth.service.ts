@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class AuthService {
@@ -57,5 +58,15 @@ export class AuthService {
       // eslint-disable-next-line no-console
       console.error('Failed to revoke the token:', error);
     }
+  }
+  googleLogin(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
   }
 }

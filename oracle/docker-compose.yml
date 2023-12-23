@@ -46,9 +46,12 @@ services:
     command:  sh -c "yarn build && yarn start:dev"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`ozkar.io`)"
+      - "traefik.http.routers.backend.rule=Host(`api.ozkar.io`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
+  
+  
   redis:
     container_name: ozkar-oracle-redis
     image: redis:5

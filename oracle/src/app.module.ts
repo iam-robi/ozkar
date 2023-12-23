@@ -6,7 +6,9 @@ import { UserModule } from './user/user.module';
 import { SignModule } from './sign/sign.module';
 import GraphQLJSON from 'graphql-type-json';
 import { AuthModule } from './auth/auth.module';
-import { AppleModule } from './apple/apple.module';
+// import { AppleModule } from './src/apple/apple.module';
+import { AppleResolver } from './apple/apple.resolver';
+import { AuthResolver } from './auth/auth.resolver';
 
 @Module({
   imports: [
@@ -27,8 +29,8 @@ import { AppleModule } from './apple/apple.module';
     UserModule,
     SignModule,
     AuthModule,
-    AppleModule,
+    // AppleModule,
   ],
-  providers: [],
+  providers: [AuthResolver],
 })
 export class AppModule {}

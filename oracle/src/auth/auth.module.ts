@@ -6,9 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { GoogleStrategy } from './google.strategy';
 
 // import { JwtStrategy } from './jwt.strategy';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
-  providers: [AuthService],
+  providers: [AuthService, AuthResolver],
   exports: [AuthService],
   imports: [
     UserModule,
