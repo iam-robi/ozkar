@@ -20,10 +20,39 @@ export class UserService extends BaseService<User> {
       address,
     });
   }
-  async findOneByEmail(username: string): Promise<User> {
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.repository.findOne({
+      email,
+    });
+  }
+  async findOneByUsername(username: string): Promise<User> {
     return await this.repository.findOne({
       username,
     });
+  }
+
+  async findOneBySocialId(socialId: string): Promise<User> {
+    return await this.repository.findOne({
+      socialId,
+    });
+  }
+
+  async existsByCredentials(
+    user: Pick<User, 'email' | 'username'>,
+  ): Promise<boolean> {
+    const email = user.email;
+    const username = user.username;
+
+    const result = await this.repository
+      .createQueryBuilder()
+      .where({ email: email })
+      .orWhere({ username: username })
+      .count()
+      .execute();
+
+    const count = result[0].count;
+
+    return count > 0;
   }
 
   async findOne(address: string): Promise<User> {

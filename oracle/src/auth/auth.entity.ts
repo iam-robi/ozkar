@@ -8,6 +8,7 @@ import {
   Unique,
   ManyToOne,
 } from '@mikro-orm/core';
+
 export enum SocialProviderTypes {
   FACEBOOK = 'facebook',
   GOOGLE = 'google',
@@ -18,6 +19,7 @@ registerEnumType(SocialProviderTypes, {
 });
 
 @Entity()
+@ObjectType()
 export class SocialProvider {
   @Field(() => Number)
   @PrimaryKey({ type: 'number' })
@@ -27,7 +29,7 @@ export class SocialProvider {
   provider: SocialProviderTypes;
 
   @Field(() => String)
-  @Unique()
+  @Property({ unique: true })
   socialId: string;
 
   @ManyToOne(() => User)

@@ -4,7 +4,9 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn
+RUN apk add --no-cache python3 make g++
+
+RUN yarn && yarn add bcrypt --force
 
 # setting env to prod removes cli for mikroorm
 #TODO CIBUILD SHOULD do w/ env production

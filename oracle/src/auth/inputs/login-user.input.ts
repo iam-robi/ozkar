@@ -3,6 +3,6 @@ import { RegisterUserInput } from './register-user.input';
 
 @InputType()
 export class LoginUserInput extends PickType(RegisterUserInput, [
-  // 'username',
+  'username',
   'password',
 ]) {}

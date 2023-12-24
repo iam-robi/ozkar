@@ -1,72 +1,117 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import { User } from '../user/entities/user.entity';
+import { AuthUserResponse } from './responses/auth-user.response';
+import { RegisterUserInput } from './inputs/register-user.input';
+import { Profile } from 'passport';
+import { SocialProviderTypes } from './auth.entity';
+import { SocialProviderRepository } from './auth.repository';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { CredentialsTakenError } from './responses/credentials-taken.error';
+import { InvalidCredentialsError } from './responses/invalid-credentials.error';
+import { Either, either } from '../common/utils/either';
+import { SocialAlreadyAssignedError } from './responses/social-already-assigned.error';
+import { SocialNotRegisteredError } from './responses/social-not-registered.error';
+import { EntityManager } from '@mikro-orm/postgresql';
 
 @Injectable()
 export class AuthService {
-  async getNewAccessToken(refreshToken: string): Promise<string> {
-    try {
-      const response = await axios.post(
-        'https://accounts.google.com/o/oauth2/token',
-        {
-          client_id: process.env.GOOGLE_CLIENT_ID,
-          client_secret: process.env.GOOGLE_CLIENT_SECRET,
-          refresh_token: refreshToken,
-          grant_type: 'refresh_token',
-        },
-      );
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly socialProviderRepository: SocialProviderRepository,
+  ) {}
 
-      return response.data.access_token;
-    } catch (error) {
-      throw new Error('Failed to refresh the access token.');
+  async validateCredentials(
+    username: string,
+    password: string,
+  ): Promise<Either<InvalidCredentialsError, User>> {
+    const user = await this.userService.findOneByUsername(username);
+    if (!(await user?.comparePassword(password))) {
+      return either.error(
+        new InvalidCredentialsError({
+          providedUsername: username,
+        }),
+      );
     }
+    return either.of(user);
   }
 
-  async getProfile(token: string) {
-    try {
-      return axios.get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`,
-      );
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to revoke the token:', error);
-    }
+  async signToken(user: User): Promise<AuthUserResponse> {
+    const payload = { username: user.username, sub: user.id };
+    return new AuthUserResponse({
+      user,
+      token: this.jwtService.sign(payload),
+    });
   }
 
-  async isTokenExpired(token: string): Promise<boolean> {
-    try {
-      const response = await axios.get(
-        `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`,
+  async registerUser(
+    user: RegisterUserInput,
+  ): Promise<Either<CredentialsTakenError, User>> {
+    if (await this.userService.existsByCredentials(user)) {
+      return either.error(
+        new CredentialsTakenError({
+          providedEmail: user.email,
+          providedUsername: user.username,
+        }),
       );
-
-      const expiresIn = response.data.expires_in;
-
-      if (!expiresIn || expiresIn <= 0) {
-        return true;
-      }
-    } catch (error) {
-      return true;
     }
+    const returnedUser = await this.userService.save(user);
+    return either.of(returnedUser);
   }
 
-  async revokeGoogleToken(token: string) {
-    try {
-      await axios.get(
-        `https://accounts.google.com/o/oauth2/revoke?token=${token}`,
+  async loginSocial(
+    profile: Profile,
+    provider: SocialProviderTypes,
+  ): Promise<Either<SocialNotRegisteredError, User>> {
+    const user = await this.userService.findOneBySocialId(profile.id);
+
+    if (!user) {
+      return either.error(
+        new SocialNotRegisteredError({
+          provider,
+        }),
       );
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to revoke the token:', error);
-    }
-  }
-  googleLogin(req) {
-    if (!req.user) {
-      return 'No user from google';
     }
 
-    return {
-      message: 'User information from google',
-      user: req.user,
-    };
+    return either.of(user);
+  }
+
+  async registerSocial(
+    profile: Profile,
+    username: string,
+    provider: SocialProviderTypes,
+  ) {
+    const email = profile.emails![0].value;
+    const socialId = profile.id;
+
+    if (await this.socialProviderRepository.existsBySocialId(socialId)) {
+      return either.error(
+        new SocialAlreadyAssignedError({
+          provider,
+        }),
+      );
+    }
+
+    if (
+      await this.userService.existsByCredentials({
+        email,
+        username,
+      })
+    ) {
+      return either.error(
+        new CredentialsTakenError({
+          providedEmail: email,
+          providedUsername: username,
+        }),
+      );
+    }
+
+    const user = await this.socialProviderRepository.saveProviderAndUser(
+      { username, email, password: randomStringGenerator() },
+      { provider, socialId },
+    );
+    return either.of(user);
   }
 }
