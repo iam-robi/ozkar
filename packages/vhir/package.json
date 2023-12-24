@@ -54,6 +54,6 @@
     "access": "public"
   },
   "dependencies": {
-    "o1js": "0.14.*"
+    "o1js": "0.15.*"
   }
 }
