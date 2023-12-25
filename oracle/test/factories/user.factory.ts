@@ -1,5 +1,5 @@
-import { User } from '../../src/user/user.entity';
-import * as faker from 'faker';
+import { User } from '../../src/user/entities/user.entity';
+import { faker } from '@faker-js/faker';
 import { LoginUserInput } from '../../src/auth/inputs/login-user.input';
 import { RegisterUserInput } from '../../src/auth/inputs/register-user.input';
 import { FactoryBuilder } from 'factory.io';

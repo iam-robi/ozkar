@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import jwtConfig from '../../config/jwt.config';
 import googleConfig from '../../config/google.config';
@@ -14,6 +14,7 @@ import { FacebookStrategy } from './strategy/facebook.strategy';
 import { SocialProviderRepository } from './auth.repository';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { SocialProvider } from './auth.entity';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 // import { JwtStrategy } from './jwt.strategy';
 
@@ -28,12 +29,14 @@ import { SocialProvider } from './auth.entity';
       useFactory: (em: EntityManager) => em.getRepository(SocialProvider),
       inject: [EntityManager],
     },
+    JwtService,
   ],
   exports: [AuthService],
   imports: [
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(googleConfig),
     ConfigModule.forFeature(facebookConfig),
+    //MikroOrmModule.forFeature([SocialProviderRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

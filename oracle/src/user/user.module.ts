@@ -4,12 +4,22 @@ import { UserResolver } from './user.resolver';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { User } from './entities/user.entity';
 //import { SignModule } from '../sign/sign.module';
-import { SignModule } from 'src/sign/sign.module';
+import { SignModule } from '../sign/sign.module';
 import { AuthModule } from '../auth/auth.module';
 
+import { UserRepository } from './user.repository';
+import { EntityRepository, EntityManager } from '@mikro-orm/postgresql';
 @Module({
-  providers: [UserResolver, UserService],
-  exports: [UserService],
-  imports: [MikroOrmModule.forFeature({ entities: [User] }), SignModule],
+  providers: [
+    UserResolver,
+    UserService,
+    {
+      provide: UserRepository,
+      useFactory: (em: EntityManager) => em.getRepository(User),
+      inject: [EntityManager],
+    },
+  ],
+  exports: [MikroOrmModule, UserService],
+  imports: [MikroOrmModule.forFeature([User]), SignModule],
 })
 export class UserModule {}
