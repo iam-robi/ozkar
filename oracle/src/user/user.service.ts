@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BaseService } from '../base/base.service';
-// import {UserRepository} from "./user.repository";
 @Injectable()
 export class UserService extends BaseService<User> {
   constructor(

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 // import { AppleModule } from './src/apple/apple.module';
 import { AppleResolver } from './apple/apple.resolver';
 import { AuthResolver } from './auth/auth.resolver';
+import { UserResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { AuthResolver } from './auth/auth.resolver';
     AuthModule,
     // AppleModule,
   ],
-  providers: [AuthResolver],
+  providers: [AuthResolver, UserResolver],
 })
 export class AppModule {}

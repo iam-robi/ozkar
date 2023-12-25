@@ -1,8 +1,8 @@
 import { User } from '../../src/user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from 'config/jwt.config';
+import jwtConfig from '../../config/jwt.config';
 import { Profile } from 'passport';
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import {
   SocialProvider,
   SocialProviderTypes,
@@ -30,8 +30,9 @@ export function authHeaderFactory(user: Partial<User>) {
 
 export const loginSocialInputFactory = FactoryBuilder.of(LoginSocialInput)
   .props({
-    accessToken: faker.random.uuid,
-    provider: faker.random.arrayElement(Object.values(SocialProviderTypes)),
+    accessToken: () => faker.string.uuid(),
+    provider: () =>
+      faker.helpers.arrayElement(Object.values(SocialProviderTypes)),
   })
   .build();
 
@@ -46,8 +47,9 @@ const emailFactory = FactoryBuilder.of<Email>()
 
 export const socialProfileFactory = FactoryBuilder.of<Profile>()
   .props({
-    provider: faker.random.arrayElement(Object.values(SocialProviderTypes)),
-    id: faker.random.uuid,
+    provider: () =>
+      faker.helpers.arrayElement(Object.values(SocialProviderTypes)),
+    id: faker.string.uuid(),
     displayName: faker.internet.userName,
     emails: emailFactory.buildMany(2),
   })
@@ -59,8 +61,9 @@ interface Email {
 
 export const socialProviderFactory = FactoryBuilder.of(SocialProvider)
   .props({
-    provider: faker.random.arrayElement(Object.values(SocialProviderTypes)),
-    socialId: faker.random.uuid,
-    created: faker.date.future,
+    provider: () =>
+      faker.helpers.arrayElement(Object.values(SocialProviderTypes)),
+    socialId: faker.string.uuid(),
+    createdAt: faker.date.future,
   })
   .build();
