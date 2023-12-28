@@ -1,7 +1,8 @@
 import Client from 'fhir-kit-client';
 import { Patient, Observation } from 'fhir/r4';
 import { ZkObservation } from '../src/resource/observation';
-import { CircuitString } from 'o1js';
+import { CircuitString, Field } from 'o1js';
+import { parseJSON } from '../src/customTypes/jsonParsing';
 
 const fhirClient = new Client({
   baseUrl: 'https://hapi.fhir.org/baseR4',
@@ -76,5 +77,11 @@ describe('Patient Observation Processing', () => {
     const code: CircuitString = zkObservation.valueQuantityCode;
     expect(value.toString()).toEqual('123');
     expect(code.toString()).toEqual('kg');
+  });
+  it('correctly uses json parser to validate resource type', async () => {
+    const observation: Observation = observationList[0];
+    const json = parseJSON(JSON.stringify(observation));
+    console.log(json.key('resourceType'));
+    json.key('resourceType').assertEqualString('Observation');
   });
 });
