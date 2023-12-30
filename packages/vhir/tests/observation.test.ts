@@ -107,6 +107,8 @@ describe('Patient Observation Processing', () => {
       '2616121661102522665207455087221215423067716202164134624228805941331883865694'
     );
 
+    console.log(json.length.toString());
+
     //NOTE: improve performance computation of json.key of this task as it is too slow to process a classique observation jso
     //json.key('resourceType').assertEqualString('"Observation"');
   });
