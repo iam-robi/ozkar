@@ -1,4 +1,4 @@
-import { Bool, Circuit, Field, Poseidon, Provable, Struct } from 'o1js';
+import { Bool, Field, Poseidon, Provable, Struct } from 'o1js';
 
 export { DynamicArray };
 
@@ -32,7 +32,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
   }
   return class _DynamicArray extends Struct({
     length: Field,
-    values: Circuit.array(type, maxLength),
+    values: Provable.Array(type, maxLength),
   }) {
     static from(values: T[]): _DynamicArray {
       return new _DynamicArray(values);
@@ -53,13 +53,13 @@ function DynamicArray<T extends { toFields(): Field[] }>(
 
     public get(index: Field): T {
       const mask = this.indexMask(index);
-      return Circuit.switch(mask, type, this.values);
+      return Provable.switch(mask, type, this.values);
     }
 
     public set(index: Field, value: T): void {
       const mask = this.indexMask(index);
       for (let i = 0; i < this.maxLength(); i++) {
-        this.values[i] = Circuit.switch([mask[i], mask[i].not()], type, [
+        this.values[i] = Provable.switch([mask[i], mask[i].not()], type, [
           value,
           this.values[i],
         ]);
@@ -76,7 +76,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       this.decrementLength(n);
 
       for (let i = 0; i < this.maxLength(); i++) {
-        this.values[i] = Circuit.switch([mask[i], mask[i].not()], type, [
+        this.values[i] = Provable.switch([mask[i], mask[i].not()], type, [
           this.values[i],
           Null(),
         ]);
@@ -88,8 +88,12 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       newArr.shiftRight(this.length);
       let masked = Bool(true);
       for (let i = 0; i < this.maxLength(); i++) {
-        masked = Circuit.if(Field(i).equals(this.length), Bool(false), masked);
-        newArr.values[i] = Circuit.if(masked, this.values[i], newArr.values[i]);
+        masked = Provable.if(Field(i).equals(this.length), Bool(false), masked);
+        newArr.values[i] = Provable.if(
+          masked,
+          this.values[i],
+          newArr.values[i]
+        );
       }
       return newArr;
     }
@@ -122,7 +126,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       let result = Field(0);
       for (let i = 0; i < this.maxLength(); i++) {
         result = result.add(
-          Circuit.if(_type.equals(this.values[i], value), Field(1), Field(0))
+          Provable.if(_type.equals(this.values[i], value), Field(1), Field(0))
         );
       }
       return result.equals(Field(0)).not();
@@ -150,7 +154,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       const result = [];
       for (let i = 0; i < this.maxLength(); i++) {
         const possibleFieldsAtI = possibleResults.map((r) => r[i]);
-        result[i] = Circuit.switch(mask, type, possibleFieldsAtI);
+        result[i] = Provable.switch(mask, type, possibleFieldsAtI);
       }
       this.values = result;
     }
@@ -171,7 +175,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       const result = [];
       for (let i = 0; i < this.maxLength(); i++) {
         const possibleFieldsAtI = possibleResults.map((r) => r[i]);
-        result[i] = Circuit.switch(mask, type, possibleFieldsAtI);
+        result[i] = Provable.switch(mask, type, possibleFieldsAtI);
       }
       this.values = result;
     }
@@ -226,7 +230,7 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       const mask = [];
       let masked = Bool(true);
       for (let i = 0; i < this.maxLength(); i++) {
-        masked = Circuit.if(Field(i).equals(n), Bool(false), masked);
+        masked = Provable.if(Field(i).equals(n), Bool(false), masked);
         mask[i] = masked;
       }
       return mask;
@@ -236,12 +240,12 @@ function DynamicArray<T extends { toFields(): Field[] }>(
       const newArr = this.copy();
       let masked = Bool(true);
       for (let i = 0; i < newArr.values.length; i++) {
-        masked = Circuit.if(
+        masked = Provable.if(
           Field(i).equals(newArr.length),
           Bool(false),
           masked
         );
-        newArr.values[i] = Circuit.if(
+        newArr.values[i] = Provable.if(
           masked,
           fn(newArr.values[i], Field(i)),
           Null()

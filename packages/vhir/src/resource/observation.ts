@@ -7,11 +7,15 @@ import {
   PrivateKey,
   Character,
 } from 'o1js';
-import { Observation, Quantity } from 'fhir/r4';
+import { Observation, Quantity, Identifier } from 'fhir/r4';
 import { CipherText } from '../customTypes/cipherText';
+//TODO: move to uuidv4 when CircuitString is made extendable
+//import { Uuidv4 } from '../customTypes/uuidv4';
 
 interface ZkObservationInitArgs {
   resourceType: CircuitString;
+  //TODO: move to uuidv4 when CircuitString is made extendable
+  identifier: CircuitString;
   code: CircuitString;
   status: CircuitString;
   subject: CircuitString;
@@ -29,6 +33,7 @@ export class ZkQuantity extends Struct({}) {
 
 export class ZkObservation extends Struct({
   resourceType: CircuitString,
+  identifier: CircuitString,
   code: CircuitString,
   status: CircuitString,
   subject: CircuitString,
@@ -48,10 +53,16 @@ export class ZkObservation extends Struct({
   static async init(rawData: Observation): Promise<ZkObservation> {
     // Extract and process FHIR Observation data
     const resourceType = CircuitString.fromString('Observation');
+
+    //we assume that the identifier is a uuidv4
+    const identifier = CircuitString.fromString(
+      rawData.identifier?.toString() || ''
+    );
     const code = CircuitString.fromString(
       rawData.code?.coding?.[0].code?.toString() || ''
     );
     const status = CircuitString.fromString(rawData.status || '');
+
     const subject = CircuitString.fromString(rawData.subject?.reference || '');
     const valueQuantityValue = CircuitString.fromString(
       rawData.valueQuantity?.value?.toString() || ''
@@ -68,6 +79,7 @@ export class ZkObservation extends Struct({
 
     return new ZkObservation({
       resourceType,
+      identifier,
       code,
       status,
       subject,
